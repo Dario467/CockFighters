@@ -7,5 +7,6 @@ class Player {
 
     draw(ctx) {
         this.sprite.draw(ctx);
+        //prueba
     }
 }

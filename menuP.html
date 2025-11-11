@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Gallos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .container-custom {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .user-data-box {
+            border: 4px solid #d4621f;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+        }
+
+        .user-data-box h4 {
+            color: #ff6b35;
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .user-data-box p {
+            color: #d4621f;
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin: 0;
+        }
+
+        .gallos-section {
+            border: 4px solid #d4621f;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+            min-height: 80px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 10px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+        }
+
+        .gallo-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+        }
+
+        .gallo img {
+            width: 60px;
+            height: 60px;
+            transition: transform 0.3s;
+        }
+
+        .gallo img:hover {
+            transform: scale(1.1);
+        }
+
+        .edit-team-section {
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+            align-self: end;
+            margin-top: 180px;
+            width: fit-content;
+            justify-self: center;
+        }
+
+        .play-section {
+            border: 4px solid #d4621f;
+            background: rgba(0, 0, 0, 0.85);
+            grid-column: 1 / 2;
+            grid-row: 3 / 4;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+        }
+
+        .ranking-section {
+            border: 4px solid #d4621f;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            grid-column: 2 / 3;
+            grid-row: 1 / 4;
+            min-height: 600px;
+            margin-left: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+        }
+
+        .ranking-section h3 {
+            color: #ff6b35;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .modal-dialog-scrollable .modal-body {
+            max-height: 300px;
+        }
+
+        .mi-navbar {
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(212, 98, 31, 0.9) 0%, rgba(61, 36, 21, 0.9) 100%);
+            border-bottom: 5px solid #d4621f;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .center_in_navbar {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-img {
+            margin-right: 5px;
+        }
+
+        .button {
+            margin-top: 5px;
+            color: white;
+            background: linear-gradient(135deg, #d4621f 0%, #ff6b35 100%);
+            padding: 12px 20px;
+            text-shadow: black 0px -1px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 11pt;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(212, 98, 31, 0.5);
+            text-transform: uppercase;
+        }
+
+        .button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.7);
+            background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
+            color: white;
+        }
+
+        .no_border {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4621f 0%, #ff6b35 100%);
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 12px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(212, 98, 31, 0.5);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.7);
+            background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #8b0000 0%, #ff0000 100%);
+            border: none;
+            padding: 18px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 12px;
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5);
+            color: white;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.7);
+            background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%);
+            color: white;
+        }
+
+        .table-dark {
+            background: rgba(61, 36, 21, 0.8);
+            border: 3px solid #d4621f;
+            border-radius: 10px;
+        }
+
+        .table-dark thead th {
+            color: #ff6b35;
+            border-color: #d4621f;
+            font-size: 1.1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .table-dark tbody td,
+        .table-dark tbody th {
+            color: #d4621f;
+            border-color: rgba(212, 98, 31, 0.3);
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(61, 36, 21, 0.5);
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95) !important;
+            border: 4px solid #d4621f !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6) !important;
+        }
+
+        .modal-header {
+            border-bottom: 3px solid #d4621f;
+        }
+
+        .modal-title {
+            color: #ff6b35;
+            font-size: 1.5rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-footer {
+            border-top: 3px solid #d4621f;
+        }
+
+        .form-label {
+            color: #ff6b35;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            background: rgba(61, 36, 21, 0.8);
+            border: 3px solid #d4621f;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .form-control:focus {
+            background: rgba(61, 36, 21, 0.9);
+            border-color: #ff6b35;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .list-group-item {
+            background: rgba(61, 36, 21, 0.8) !important;
+            border: 2px solid #d4621f !important;
+            color: #ff6b35 !important;
+            margin-bottom: 5px;
+            border-radius: 10px !important;
+        }
+
+        .list-group-item:hover {
+            background: rgba(61, 36, 21, 0.95) !important;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3d2415 0%, #5a3620 100%);
+            border: 3px solid #d4621f;
+            color: #d4621f;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a3620 0%, #3d2415 100%);
+            color: #ff6b35;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark mi-navbar justify-content-center fixed-top" style="padding: 0;">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="button" data-bs-toggle="modal" data-bs-target="#modalEditUser">Usuario</a>
+            </li>
+        </ul>
+        <img class="no_border nav-img" src="./Assets/interface/cockFighterTitulo.png" width="187" height="56">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="button" href="tienda.html">Tienda</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="modal fade modalB" id="modalEditUser" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Usuario</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditUser">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="editEmail" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Contraseña (opcional)</label>
+                            <input type="password" class="form-control" id="editPassword" name="password" placeholder="Dejar en blanco para no cambiar">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-bs-target="#modalDeleteUserConfirm" data-bs-toggle="modal">Eliminar Cuenta</button>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-custom">
+        <div class="user-data-box">
+            <h4>Nombre de Usuario: JuanPerez</h4>
+            <p>Ranking Global: #153</p>
+        </div>
+
+        <div class="gallos-section">
+            <div class="gallo img">
+                <img src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png" alt="gallo 1">
+            </div>
+            <div class="gallo img">
+                <img src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png" alt="gallo 2">
+            </div>
+            <div class="gallo img">
+                <img src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png" alt="gallo 3">
+            </div>
+        </div>
+
+        <div class="edit-team-section">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editTeamModal">
+                Editar Equipo
+            </button>
+
+            <div class="modal fade" id="editTeamModal" tabindex="-1" aria-labelledby="editTeamModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editTeamModalLabel">Seleccionar Gallos (Máx. 3)</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo1">
+                                    <label class="form-check-label" for="gallo1">Rayo Veloz</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo2">
+                                    <label class="form-check-label" for="gallo2">Furia Roja</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo3">
+                                    <label class="form-check-label" for="gallo3">Pico de Acero</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo4">
+                                    <label class="form-check-label" for="gallo4">Ala de Trueno</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo5">
+                                    <label class="form-check-label" for="gallo5">Garra Letal</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo6">
+                                    <label class="form-check-label" for="gallo6">El Gladiador</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo7">
+                                    <label class="form-check-label" for="gallo7">Sombra Nocturna</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary">Guardar Selección</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="play-section">
+            <a type="button" class="btn btn-danger" href="game.html">jugar</a>
+        </div>
+
+        <div class="ranking-section">
+            <h3>Ranking Global</h3>
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Puntos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Usuario1</td>
+                        <td>1500</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Usuario2</td>
+                        <td>1450</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Usuario3</td>
+                        <td>1400</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>Usuario4</td>
+                        <td>1380</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>Usuario5</td>
+                        <td>1350</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>Usuario6</td>
+                        <td>1320</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td>Usuario7</td>
+                        <td>1290</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8</th>
+                        <td>Usuario8</td>
+                        <td>1250</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9</th>
+                        <td>Usuario9</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10</th>
+                        <td>Usuario10</td>
+                        <td>1150</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('#editTeamModal input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const checkedCount = document.querySelectorAll('#editTeamModal input[type="checkbox"]:checked').length;
+                    if (checkedCount > 3) {
+                        this.checked = false;
+                        alert('Solo puedes seleccionar un máximo de 3 gallos.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

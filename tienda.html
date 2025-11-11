@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Gallos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .mi-navbar {
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(212, 98, 31, 0.9) 0%, rgba(61, 36, 21, 0.9) 100%);
+            border-bottom: 5px solid #d4621f;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 50px;
+        }
+
+        .nav-img {
+            margin: 10px;
+        }
+
+        .button {
+            margin: 10px;
+            color: white;
+            background: linear-gradient(135deg, #d4621f 0%, #ff6b35 100%);
+            padding: 12px 20px;
+            text-shadow: black 0px -1px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 11pt;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(212, 98, 31, 0.5);
+            text-transform: uppercase;
+        }
+
+        .button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.7);
+            background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
+            color: white;
+        }
+
+        .store-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .store-title {
+            text-align: center;
+            color: #ff6b35;
+            font-size: 3rem;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.9);
+            margin-bottom: 50px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.85);
+            border: 4px solid #d4621f;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 50px rgba(212, 98, 31, 0.8);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8rem;
+            margin-bottom: 20px;
+            background: rgba(61, 36, 21, 0.3);
+            border-radius: 15px;
+            border: 3px solid #d4621f;
+        }
+
+        .product-name {
+            color: #ff6b35;
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .product-description {
+            color: #d4621f;
+            font-size: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            flex-grow: 1;
+            font-family: Arial, sans-serif;
+        }
+
+        .product-price {
+            color: #ff6b35;
+            font-size: 2rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #d4621f 0%, #ff6b35 100%);
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 12px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(212, 98, 31, 0.5);
+            color: white;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.7);
+            background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
+        }
+
+        .cart-summary {
+            background: rgba(0, 0, 0, 0.85);
+            border: 4px solid #d4621f;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cart-summary h3 {
+            color: #ff6b35;
+            font-size: 2rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .cart-total {
+            color: #d4621f;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95) !important;
+            border: 4px solid #d4621f !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 40px rgba(212, 98, 31, 0.6) !important;
+        }
+
+        .modal-header {
+            border-bottom: 3px solid #d4621f;
+        }
+
+        .modal-title {
+            color: #ff6b35;
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-footer {
+            border-top: 3px solid #d4621f;
+        }
+
+        .modal-body {
+            color: #d4621f;
+            font-size: 1.1rem;
+        }
+
+        .cart-item {
+            background: rgba(61, 36, 21, 0.5);
+            border: 2px solid #d4621f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-name {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            color: #d4621f;
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            color: #d4621f;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .total-section {
+            background: rgba(61, 36, 21, 0.7);
+            border: 3px solid #d4621f;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .total-label {
+            color: #ff6b35;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3d2415 0%, #5a3620 100%);
+            border: 3px solid #d4621f;
+            color: #d4621f;
+            font-weight: bold;
+            transition: all 0.3s;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a3620 0%, #3d2415 100%);
+            color: #ff6b35;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #006400 0%, #228b22 100%);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(34, 139, 34, 0.5);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.7);
+            background: linear-gradient(135deg, #228b22 0%, #006400 100%);
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark mi-navbar justify-content-center">
+        <a class="button" href="menuP.html">Volver al Juego</a>
+        <img class="nav-img" src="./Assets/interface/cockFighterTitulo.png" width="187" height="56" alt="Cock Fighters">
+        <a class="button" href="#" data-bs-toggle="modal" data-bs-target="#cartModal" id="cartButton">Mi Carrito (0)</a>
+    </nav>
+
+    <div class="store-container">
+        <h1 class="store-title">🛒 Tienda de Gallos 🛒</h1>
+
+        <div class="products-grid">
+            <!-- Producto 1 -->
+            <div class="product-card">
+                <div class="product-image">🐓</div>
+                <h3 class="product-name">Gallo Legendario</h3>
+                <p class="product-description">
+                    El más poderoso de todos los gallos. Con estadísticas superiores en fuerza, 
+                    velocidad y resistencia. Perfecto para dominar cualquier batalla y escalar 
+                    rápidamente en el ranking global.
+                </p>
+                <div class="product-price">$499.00</div>
+                <button class="btn-buy" onclick="addToCart('Gallo Legendario', 499)">Comprar Ahora</button>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="product-card">
+                <div class="product-image">🐓</div>
+                <h3 class="product-name">BBC</h3>
+                <p class="product-description">
+                    Que es mejor que un buen gran gordo gallo ?.
+                </p>
+                <div class="product-price">$299.00</div>
+                <button class="btn-buy" onclick="addToCart('Boost de Velocidad', 299)">Comprar Ahora</button>
+            </div>
+
+            <!-- Producto 3 -->
+            <div class="product-card">
+                <div class="product-image">🐓</div>
+                <h3 class="product-name">El gallo de oro</h3>
+                <p class="product-description">
+                    humilla a tus adversarios con melancolicas tonadas 
+                </p>
+                <div class="product-price">$199.00</div>
+                <button class="btn-buy" onclick="addToCart('Pack de 1000 Gemas', 199)">Comprar Ahora</button>
+            </div>
+
+
+        </div>
+
+        <div class="cart-summary">
+            <h3>Resumen de Compra</h3>
+            <div class="cart-total" id="cartTotal">Total: $0.00</div>
+            <button class="btn-buy" data-bs-toggle="modal" data-bs-target="#cartModal">Ver Carrito</button>
+        </div>
+    </div>
+
+    <!-- Modal del Carrito -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">🛒 Mi Carrito de Compras</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItemsList">
+                        <div class="empty-cart">
+                            Tu carrito está vacío <br>
+                            ¡Añade algunos productos épicos!
+                        </div>
+                    </div>
+                    <div class="total-section">
+                        <div class="total-label">Total a Pagar: <span id="modalTotal">$0.00</span></div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="checkout()">Comprar Ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let cartTotal = 0;
+        let cartItems = 0;
+        let cartProducts = [];
+
+        function addToCart(productName, price) {
+            cartTotal += price;
+            cartItems++;
+            
+            // Añadir producto al array
+            cartProducts.push({
+                name: productName,
+                price: price
+            });
+            
+            document.getElementById('cartTotal').textContent = `Total: ${cartTotal.toFixed(2)}`;
+            document.getElementById('modalTotal').textContent = `${cartTotal.toFixed(2)}`;
+            
+            document.getElementById('cartButton').textContent = `Mi Carrito (${cartItems})`;
+            
+            updateCartModal();
+            
+            // Mostrar alerta
+            alert(`✅ ${productName} añadido al carrito!\nTotal: ${cartTotal.toFixed(2)}`);
+        }
+
+        function updateCartModal() {
+            const cartItemsList = document.getElementById('cartItemsList');
+            
+            if (cartProducts.length === 0) {
+                cartItemsList.innerHTML = `
+                    <div class="empty-cart">
+                        Tu carrito está vacío <br>
+                        ¡Añade algunos productos épicos!
+                    </div>
+                `;
+            } else {
+                let itemsHTML = '';
+                cartProducts.forEach((product, index) => {
+                    itemsHTML += `
+                        <div class="cart-item">
+                            <span class="cart-item-name">${product.name}</span>
+                            <span class="cart-item-price">${product.price.toFixed(2)}</span>
+                        </div>
+                    `;
+                });
+                cartItemsList.innerHTML = itemsHTML;
+            }
+        }
+
+        function checkout() {
+            if (cartTotal === 0) {
+                alert('Tu carrito está vacío. Añade productos antes de proceder al pago.');
+            } else {
+                alert(`Procesando pago de ${cartTotal.toFixed(2)}\n¡Gracias por tu compra, gallero!`);
+                
+                cartTotal = 0;
+                cartItems = 0;
+                cartProducts = [];
+                
+                document.getElementById('cartTotal').textContent = 'Total: $0.00';
+                document.getElementById('modalTotal').textContent = '$0.00';
+                document.getElementById('cartButton').textContent = 'Mi Carrito (0)';
+                
+                updateCartModal();
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
+                if (modal) {
+                    modal.hide();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -94,12 +94,17 @@
                 width: 92%;
             }
              .gallo-card {
+                filter: brightness(75%);
                 margin-top: 15px;
                 margin-left: 8px;
                 margin-right: 8px;
                 border-radius: 5px;
                 box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
                 align-content: center;
+            }
+            .selected-gallo {
+                filter: brightness(100%);
+                border: 2px solid #ff6b35;
             }
             .container{
                 display: flex;
@@ -173,8 +178,8 @@
                 <div class="card card_decoration textback" style="width:358px; height:170px">
                     <h2 class="title_txt">Cambiar Gallo</h2>
                     <div class="container">
-                        <div class="gallo-card" style="width:90px; height:90px">
-                            <img src="./Assets/gallo_sprite_front1.png" width="90" height="90" style="filter: grayscale(100%);">
+                        <div class="gallo-card selected-gallo" style="width:90px; height:90px">
+                            <img src="./Assets/gallo_sprite_front1.png" width="90" height="90">
                         </div>
                         <div class="gallo-card" style="width:90px; height:90px">
                             <img src="./Assets/gallo_sprite_front1.png" width="90" height="90">

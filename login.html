@@ -6,7 +6,6 @@
     <title>Gallitos Fighters - Login/Registro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
         body {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
             font-family: 'Arial Black', sans-serif;
@@ -16,7 +15,6 @@
             overflow-x: hidden;
         }
 
-        /* formato del header */
         .game-header {
             background: linear-gradient(180deg, rgba(212, 98, 31, 0.9) 0%, rgba(61, 36, 21, 0.9) 100%);
             padding: 20px 0;
@@ -34,15 +32,6 @@
             letter-spacing: 3px;
         }
 
-        .rooster-icon {
-            font-size: 5rem;
-            display: inline-block;
-            margin: 0 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-
-        /* contenedor principal */
         .main-container {
             display: flex;
             min-height: calc(100vh - 160px);
@@ -52,7 +41,6 @@
             justify-content: center;
         }
 
-        /* mucho texto del lado izquierdo (info)*/
         .info-section {
             flex: 1;
             max-width: 600px;
@@ -89,9 +77,6 @@
             position: relative;
         }
 
-
-
-        /* formulario del lado derecho*/
         .form-section-container {
             flex: 1;
             max-width: 550px;
@@ -199,6 +184,12 @@
             background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
         }
 
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .alert {
             border-radius: 12px;
             border: 3px solid;
@@ -230,13 +221,6 @@
             margin-top: 25px;
         }
 
-
-        .main-container {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* botones responsivos */
         @media (max-width: 1024px) {
             .main-container {
                 flex-direction: column;
@@ -254,8 +238,6 @@
     </style>
 </head>
 <body>
-
-
     <div class="game-header">
         <h1 class="game-title">
             <img src="./Assets/interface/cockFighterTitulo.png" alt="Cock Fighters" style="height: 100px;">
@@ -266,9 +248,9 @@
         <div class="info-section">
             <h2 class="welcome-text">Bienvenido Gallero!</h2>
             <p class="description">
-                Cock Fighter es la plataforma donde puedes combatir en línea en épicas peleas
-                 de gallos. Desarrolla estrategias únicas, selecciona tus mejores gallos
-                 y demuestra tu habilidad enfrentándote a otros jugadores.
+                Cock Fighter es un juego donde puedes combatir en línea en épicas peleas
+                de gallos. Desarrolla estrategias únicas, selecciona tus mejores gallos
+                y demuestra tu habilidad enfrentándote a otros jugadores.
             </p>
             <ul class="features-list">
                 <li>Crea a tu entrenador </li>
@@ -287,8 +269,9 @@
                     <button class="tab-btn" onclick="showTab('register')">Registrarse</button>
                 </div>
 
+                <!-- FORMULARIO DE LOGIN -->
                 <div id="loginForm" class="form-section active">
-                    <form onsubmit="event.preventDefault(); showTemporaryAlert('Iniciando Sesión (Solo Interfaz)', 'success');">
+                    <form id="formLogin" onsubmit="handleLogin(event)">
                         <div class="form-group">
                             <label class="form-label">Usuario o Email</label>
                             <input type="text" class="form-control" id="loginUsername" placeholder="Ingresa tu usuario" required>
@@ -297,12 +280,13 @@
                             <label class="form-label">Contraseña</label>
                             <input type="password" class="form-control" id="loginPassword" placeholder="Ingresa tu contraseña" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Entrar al Juego</button>
+                        <button type="submit" class="btn btn-primary" id="loginBtn">Entrar al Juego</button>
                     </form>
                 </div>
 
+                <!-- FORMULARIO DE REGISTRO -->
                 <div id="registerForm" class="form-section">
-                    <form onsubmit="event.preventDefault(); showTemporaryAlert('Registro enviado (Solo Interfaz)', 'success');">
+                    <form id="formRegister" onsubmit="handleRegister(event)">
                         <div class="form-group">
                             <label class="form-label">Usuario</label>
                             <input type="text" class="form-control" id="registerUsername" placeholder="Elige tu nombre de gallero" required minlength="3">
@@ -319,7 +303,7 @@
                             <label class="form-label">Confirmar Contraseña</label>
                             <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Repite tu contraseña" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+                        <button type="submit" class="btn btn-primary" id="registerBtn">Crear Cuenta</button>
                     </form>
                 </div>
 
@@ -369,6 +353,83 @@
             }, 5000);
         }
 
+        //manejo del login
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            //validación basica
+            if (!username || !password) {
+                showTemporaryAlert('Por favor completa todos los campos', 'error');
+                return;
+            }
+
+            //apaga los botones en lo que entras
+            btn.disabled = true;
+            btn.textContent = 'Entrando...';
+
+            //simula las validaciones
+            setTimeout(() => {
+                //guartda datos de sesión es opcional
+                sessionStorage.setItem('userLoggedIn', 'true');
+                sessionStorage.setItem('username', username);
+
+                //te manda a menuP.html
+                window.location.href = 'menuP.html';
+            }, 500);
+        }
+
+        //manejo del registro
+        function handleRegister(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const btn = document.getElementById('registerBtn');
+
+            // Validaciones
+            if (password !== confirmPassword) {
+                showTemporaryAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showTemporaryAlert('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+
+            // deshabilita botón
+            btn.disabled = true;
+            btn.textContent = 'Creando cuenta...';
+
+            // simula registro
+            setTimeout(() => {
+                showTemporaryAlert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión', 'success');
+
+                // cambia a la pestaña de login después de 2 segundos
+                setTimeout(() => {
+                    showTab('login');
+                    // prerellena el user
+                    document.getElementById('loginUsername').value = username;
+                }, 2000);
+
+                btn.disabled = false;
+                btn.textContent = 'Crear Cuenta';
+            }, 1000);
+        }
+
+        //verifica si hay una sesión activa
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('userLoggedIn') === 'true') {
+                //redirige si hay una sesión
+                window.location.href = 'menuP.html';
+            }
+        });
     </script>
 </body>
 </html>

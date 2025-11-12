@@ -15,6 +15,7 @@
             overflow-x: hidden;
         }
 
+        /* formato del header */
         .game-header {
             background: linear-gradient(180deg, rgba(212, 98, 31, 0.9) 0%, rgba(61, 36, 21, 0.9) 100%);
             padding: 20px 0;
@@ -32,6 +33,7 @@
             letter-spacing: 3px;
         }
 
+        /* contenedor principal */
         .main-container {
             display: flex;
             min-height: calc(100vh - 160px);
@@ -41,6 +43,7 @@
             justify-content: center;
         }
 
+        /* mucho texto del lado izquierdo (info)*/
         .info-section {
             flex: 1;
             max-width: 600px;
@@ -77,6 +80,7 @@
             position: relative;
         }
 
+        /* formulario del lado derecho*/
         .form-section-container {
             flex: 1;
             max-width: 550px;
@@ -221,6 +225,7 @@
             margin-top: 25px;
         }
 
+        /* botones responsivos */
         @media (max-width: 1024px) {
             .main-container {
                 flex-direction: column;
@@ -269,42 +274,40 @@
                     <button class="tab-btn" onclick="showTab('register')">Registrarse</button>
                 </div>
 
-                <!-- FORMULARIO DE LOGIN -->
+                <!--formulario de login -->
                 <div id="loginForm" class="form-section active">
-                    <form id="formLogin" onsubmit="handleLogin(event)">
-                        <div class="form-group">
-                            <label class="form-label">Usuario o Email</label>
-                            <input type="text" class="form-control" id="loginUsername" placeholder="Ingresa tu usuario" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Ingresa tu contraseña" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="loginBtn">Entrar al Juego</button>
-                    </form>
+                    <div class="form-group">
+                        <label class="form-label">Usuario o Email</label>
+                        <input type="text" class="form-control" id="loginUsername" placeholder="Ingresa tu usuario">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Ingresa tu contraseña">
+                    </div>
+                    <!-- Botón que redirige directamente a menuP.html -->
+                    <a href="menuP.html" class="btn btn-primary" style="text-decoration: none; display: block; text-align: center;">Entrar al Juego</a>
                 </div>
 
-                <!-- FORMULARIO DE REGISTRO -->
+                <!-- formulario de registro -->
                 <div id="registerForm" class="form-section">
-                    <form id="formRegister" onsubmit="handleRegister(event)">
-                        <div class="form-group">
-                            <label class="form-label">Usuario</label>
-                            <input type="text" class="form-control" id="registerUsername" placeholder="Elige tu nombre de gallero" required minlength="3">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="registerEmail" placeholder="tu@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="registerPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Repite tu contraseña" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="registerBtn">Crear Cuenta</button>
-                    </form>
+                    <div class="form-group">
+                        <label class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="registerUsername" placeholder="Elige tu nombre de gallero">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="registerEmail" placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="registerPassword" placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Repite tu contraseña">
+                    </div>
+                    <!-- boton a menuP.html -->
+                    <a href="menuP.html" class="btn btn-primary" style="text-decoration: none; display: block; text-align: center;">Crear Cuenta</a>
                 </div>
 
                 <div class="extra-info">
@@ -336,100 +339,6 @@
                 tabs[1].classList.add('active');
             }
         }
-
-        //función para mostrar las alertas
-        function showTemporaryAlert(message, type) {
-            const alertContainer = document.getElementById('alertContainer');
-            const alertClass = type === 'error' ? 'alert-danger' : 'alert-success';
-            alertContainer.innerHTML = `
-                <div class="alert ${alertClass}" role="alert">
-                    ${message}
-                </div>
-            `;
-
-            // después de 5s las quita
-            setTimeout(() => {
-                alertContainer.innerHTML = '';
-            }, 5000);
-        }
-
-        //manejo del login
-        function handleLogin(event) {
-            event.preventDefault();
-
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const btn = document.getElementById('loginBtn');
-
-            //validación basica
-            if (!username || !password) {
-                showTemporaryAlert('Por favor completa todos los campos', 'error');
-                return;
-            }
-
-            //apaga los botones en lo que entras
-            btn.disabled = true;
-            btn.textContent = 'Entrando...';
-
-            //simula las validaciones
-            setTimeout(() => {
-                //guartda datos de sesión es opcional
-                sessionStorage.setItem('userLoggedIn', 'true');
-                sessionStorage.setItem('username', username);
-
-                //te manda a menuP.html
-                window.location.href = 'menuP.html';
-            }, 500);
-        }
-
-        //manejo del registro
-        function handleRegister(event) {
-            event.preventDefault();
-
-            const username = document.getElementById('registerUsername').value.trim();
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            const btn = document.getElementById('registerBtn');
-
-            // Validaciones
-            if (password !== confirmPassword) {
-                showTemporaryAlert('Las contraseñas no coinciden', 'error');
-                return;
-            }
-
-            if (password.length < 6) {
-                showTemporaryAlert('La contraseña debe tener al menos 6 caracteres', 'error');
-                return;
-            }
-
-            // deshabilita botón
-            btn.disabled = true;
-            btn.textContent = 'Creando cuenta...';
-
-            // simula registro
-            setTimeout(() => {
-                showTemporaryAlert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión', 'success');
-
-                // cambia a la pestaña de login después de 2 segundos
-                setTimeout(() => {
-                    showTab('login');
-                    // prerellena el user
-                    document.getElementById('loginUsername').value = username;
-                }, 2000);
-
-                btn.disabled = false;
-                btn.textContent = 'Crear Cuenta';
-            }, 1000);
-        }
-
-        //verifica si hay una sesión activa
-        window.addEventListener('DOMContentLoaded', () => {
-            if (sessionStorage.getItem('userLoggedIn') === 'true') {
-                //redirige si hay una sesión
-                window.location.href = 'menuP.html';
-            }
-        });
     </script>
 </body>
 </html>

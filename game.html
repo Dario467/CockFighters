@@ -17,18 +17,40 @@
             crossorigin="anonymous"
         />
         <style>
+            body {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+                font-family: 'Arial Black', sans-serif;
+                min-height: 100vh;
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+            }
+            .game-header {
+                background: linear-gradient(180deg, rgba(212, 98, 31, 0.9) 0%, rgba(61, 36, 21, 0.9) 100%);
+                padding: 20px 0;
+                text-align: center;
+                border-bottom: 5px solid #d4621f;
+            }
             .button {
                 margin-top: 5px;
                 color: white;
-                background: linear-gradient(to bottom, #83301c, #7b451b);
-                padding: 8px 15px;
+                background: linear-gradient(135deg, #d4621f 0%, #ff6b35 100%);
                 text-shadow: black 0px -1px 0;
-                border-radius: 5px;
+                border-radius: 12px;
                 text-decoration: none;
                 display: inline-block;
-                font-family: Verdana, Helvetica, sans-serif;
+                font-family: 'Arial Black', sans-serif;
                 font-size: 11pt;
                 cursor: pointer;
+                border: none;
+                font-weight: bold;
+                transition: all 0.3s;
+                box-shadow: 0 5px 20px rgba(212, 98, 31, 0.5);
+                text-transform: uppercase;
+                text-align: center;
+                align-content: center;
+                height: 40px;
+                width: 100px;
             }
             .no_border{
                 border: none;
@@ -48,27 +70,123 @@
                 align-items: center;  
             }
             .nav-img{
+                margin-right: 4px;
+            }
+            .textback{
+                margin-top: 0px;
+                margin-left: 5px;
                 margin-right: 5px;
+                background: rgba(45, 27, 16, 1);
+                border: 2px solid #d4621f;
+                border-top: none;
+                border-radius: 0;
+                box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+            }
+            .title_txt {
+                color: white;
+                text-align: center;
+                font-size: 18px;
+                text-shadow: 2px 2px 4px #000000;
+                margin: 8px auto;
+                border-bottom: 1px solid #d4621f;
+                padding-bottom: 6px;
+                display: inline-block;
+                width: 92%;
+            }
+             .gallo-card {
+                margin-top: 15px;
+                margin-left: 8px;
+                margin-right: 8px;
+                border-radius: 5px;
+                box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+                align-content: center;
+            }
+            .container{
+                display: flex;
+                flex-wrap: wrap;
+                overflow-y: auto;
+            }
+            .action-button{
+                margin-left: 10px;
+                margin-right: 8px;
+                margin-top: 15px;
+                margin-bottom: 10px;
+                font-size: 18px;
+                border: 2px solid #d4621f;
+                outline: none;
+                color: white;
+                background: none;
+                text-decoration: none;
+                box-shadow: none;
+                font-weight: bold;
+                font-size: 11pt;
+                cursor: pointer;
+                width: 190px;
+                box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
+            }
+            .button:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 25px rgba(255, 107, 53, 0.7);
+                background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
+                color: white;
+            }
+            .canva_decor{
+                border: 4px solid #d4621f;
+                border-top: none;
+                border-radius: 0;
+                box-shadow: 0 0 40px rgba(212, 98, 31, 0.6);
             }
         </style>
     </head>
 
     <body>
-         <nav class="navbar navbar-expand-sm navbar-dark mi-navbar justify-content-center" style="padding: 0;">
+         <nav class="navbar navbar-expand-sm navbar-dark mi-navbar justify-content-center game-header" style="padding: 0;">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="button" href="task.html">Menu</a>
+                <a class="button" href="menuP.html">Menu</a>
                 </li>
             </ul>
             <img class="no_border nav-img" src="./Assets/interface/cockFighterTitulo.png" width="187" height="56">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="button" href="task.html">Reiniciar</a>
+                <a class="button" href="">Revancha</a>
                 </li>
             </ul>
         </nav>
+        <div class="center_in_navbar">
+            <canvas class="canva_decor"></canvas>
 
-        <canvas></canvas>
+            <div class="card_container">
+                <div class="card card_decoration textback" style="width:664px; height:170px">
+                    <h2 class="title_txt">Selector de acciones</h2>
+                    <div class="container">
+                        <button class="action-button">Recargar</button>
+                        <button class="action-button">Escudo</button>
+                        <button class="action-button">Disparo</button>
+                        <button class="action-button">Bailarle</button>
+                        <button class="action-button">Granadaso</button>
+                        <button class="action-button">Escupe fuego</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card_container">
+                <div class="card card_decoration textback" style="width:358px; height:170px">
+                    <h2 class="title_txt">Cambiar Gallo</h2>
+                    <div class="container">
+                        <div class="gallo-card" style="width:90px; height:90px">
+                            <img src="./Assets/gallo_sprite_front1.png" width="90" height="90" style="filter: grayscale(100%);">
+                        </div>
+                        <div class="gallo-card" style="width:90px; height:90px">
+                            <img src="./Assets/gallo_sprite_front1.png" width="90" height="90">
+                        </div>
+                        <div class="gallo-card" style="width:90px; height:90px">
+                            <img src="./Assets/gallo_sprite_front1.png" width="90" height="90">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="spriteRender.js"></script>
         <script src="player.js"></script>
         <script src="index.js"></script>

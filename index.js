@@ -14,11 +14,11 @@ const player = new Player({
     x:300,
     y:207
 },
- "./Assets/gallo_sprite_front1.png");
+ "./Assets/gallo_sprite_front1.pngg");
 
 function gameLoop() {
   window.requestAnimationFrame(gameLoop);
-  c.fillStyle = "black";
+  c.fillStyle = "lightgray";
   c.fillRect(0,0,canvas.width, canvas.height);
   player.draw(c);
 }

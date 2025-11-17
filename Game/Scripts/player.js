@@ -1,0 +1,82 @@
+class PlayerException{
+    constructor(errorMessage){
+        this.message = errorMessage;
+    }
+}
+
+class Player {
+    #spriteRender;
+    #UIManager;
+
+    #position;
+    #position2;
+    #selectedCock;
+    #player;
+
+    constructor(position, position2, scale, cocks, player) {
+        this.#position = position;
+        this.#position2 = position2;
+        this.scale = scale;
+        this.cocks = cocks;
+        this.#selectedCock = cocks[0];
+        this.player = player;
+    }
+
+    player_awake() {
+        this.#spriteRender = new SpriteRender(this.#position, this.scale,this.#selectedCock.sprites[0]);
+        this.#UIManager = new UIManager(this.#player);
+        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
+        this.#UIManager.updateTopUI(this.#selectedCock.nombre,this.#selectedCock.poder);
+        this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
+    }
+
+    draw(ctx, sprite_id, view1) {
+        if(view1){
+            this.#spriteRender = new SpriteRender(this.#position, this.scale,this.#selectedCock.sprites[sprite_id]);
+            this.#spriteRender.draw(ctx);
+        }else{
+            this.#spriteRender = new SpriteRender(this.#position2, this.scale,this.#selectedCock.sprites[sprite_id]);
+            this.#spriteRender.draw(ctx);
+        }
+    }
+
+    set position(newPosition) {
+        this.#position = newPosition;
+    }
+    
+    get position() {
+        return this.#position;
+    }
+
+    set player(n){
+        if (n < 1 || n > 2){
+            throw new PlayerException("Player number must be 1 or 2");
+        }else{
+            this.#player = n;
+        }
+    }
+
+    get player(){
+        return this.#player;
+    }
+
+    damage(amount) {
+        this.#selectedCock.damage(amount);
+        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
+    }
+
+    heal(amount){
+        this.#selectedCock.heal(amount);
+        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
+    }
+
+    recharge(amount){
+        this.#selectedCock.recharge(amount);
+        this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
+    }
+
+    useBullets(amount){
+        this.#selectedCock.useBullets(amount);
+        this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
+    }
+}

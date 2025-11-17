@@ -26,7 +26,7 @@ const player1 = new Player({
     y:240
 },
 [
-  new Cock("GunCock",15,12,6,["./Assets/gallo_sprite_front1.png","./Assets/gallo_sprite_front.png"])
+  new Cock("GunCock",15,12,6,["/Assets/gallo_sprite_front1.png","/Assets/gallo_sprite_front.png"])
 ],
 1);
 
@@ -43,7 +43,7 @@ const player2 = new Player({
     y:240
 },
 [
-  new Cock("GunCock",20,8,6,["./Assets/gallo_sprite_front1.png","./Assets/gallo_sprite_front.png"])
+  new Cock("GunCock",20,8,6,["/Assets/gallo_sprite_front1.png","/Assets/gallo_sprite_front.png"])
 ],
 2);
 
@@ -66,5 +66,8 @@ function gameLoop() {
 
   player1.draw(c2,1,false);
   player2.draw(c2,0,false);
+
+  player1.damage(1);
+  player2.recharge(1)
 }
 gameLoop();

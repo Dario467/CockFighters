@@ -68,6 +68,6 @@ function gameLoop() {
   player2.draw(c2,0,false);
 
   player1.damage(1);
-  player2.recharge(1)
+  player1.recharge(1);
 }
 gameLoop();

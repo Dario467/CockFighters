@@ -3,6 +3,7 @@ class UIManager{
     #uiTopBar;
     #uiHealthNum;
     #uiBullets;
+    #uiShield;
 
     constructor(player){
         this.Awake(player)
@@ -14,11 +15,13 @@ class UIManager{
             this.#uiTopBar = document.querySelectorAll(".top1_bar");
             this.#uiHealthNum = document.querySelectorAll(".health_n1");
             this.#uiBullets = document.querySelectorAll(".bullet1");
+            this.#uiShield = document.querySelectorAll(".shield1");
         }else{
             this.#uiHealthBar = document.querySelectorAll(".p2_bar");
             this.#uiTopBar = document.querySelectorAll(".top2_bar");
             this.#uiHealthNum = document.querySelectorAll(".health_n2");
             this.#uiBullets = document.querySelectorAll(".bullet2");
+            this.#uiShield = document.querySelectorAll(".shield2");
         }
     }
 
@@ -75,6 +78,22 @@ class UIManager{
             icon2.className = "img_bullet";
             icon2.style.filter = "grayscale(100%)";
             this.#uiBullets[1].appendChild(icon2);
+        }
+    }
+
+    updateShieldUI(shields){
+        this.#uiShield[0].innerHTML = "";
+        this.#uiShield[1].innerHTML = "";
+        for (let i = 0; i < shields; i++) {
+            let icon1 = document.createElement("img");
+            icon1.src = "https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png";
+            icon1.className = "img_shield";
+            this.#uiShield[0].appendChild(icon1);
+
+            let icon2 = document.createElement("img");
+            icon2.src = "https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png";
+            icon2.className = "img_shield";
+            this.#uiShield[1].appendChild(icon2);
         }
     }
 }

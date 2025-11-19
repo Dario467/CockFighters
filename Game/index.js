@@ -53,8 +53,9 @@ function gameLoop() {
     console.log("Game Started");
     player1.player_awake();
     player2.player_awake();
+    animationMove(player2, 900, 1,400);
+    animationMove(player1, -300, 1,-400);
   }
-  window.requestAnimationFrame(gameLoop);
   c.fillStyle = "lightgray";
   c.fillRect(0,0,canvas.width, canvas.height);
   
@@ -66,8 +67,38 @@ function gameLoop() {
 
   player1.draw(c2,1,false);
   player2.draw(c2,0,false);
-
-  player1.damage(1);
-  player1.recharge(1);
+  window.requestAnimationFrame(gameLoop);
 }
 gameLoop();
+
+function animationMove(player, initialPos, duration, speed) {
+  return new Promise(resolve => {
+    let lastTime = 0;
+    let time = 0;
+    player.position.x = initialPos;
+
+    function step(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+
+      const delta = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+      time += delta;
+
+      player.position.x -= speed * delta;
+
+      if (time < duration) {
+        requestAnimationFrame(step);
+      } else {
+        resolve();
+      }
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+async function run() {
+  await animationMove(player2, 900, 0.5);
+  await animationMove(player2, 800, 0.5);
+  await animationMove(player2, 700, 0.5);
+  console.log("Listo!");
+}

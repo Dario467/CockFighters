@@ -6,6 +6,7 @@ class Cock {
         this.poder = poder;
         this.bulletsMax = bulletsMax;
         this.bullets = 0;
+        this.shields = 0;
         this.sprites = sprites;
     }
 
@@ -34,6 +35,23 @@ class Cock {
         this.bullets -= amount;
         if (this.bullets < 0) {
             this.bullets = 0;
+        }
+    }
+
+    rechargeShield(amount, max = 4){
+        if(this.shields === 0){
+            this.shields += 1;
+        }
+        this.shields += amount;
+        if(this.shields > max){
+            this.shields = max;
+        }
+    }
+
+    useShield(amount){
+        this.shields -= amount;
+        if (this.shields < 0) {
+            this.shields = 0;
         }
     }
 }

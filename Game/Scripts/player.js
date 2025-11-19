@@ -28,6 +28,7 @@ class Player {
         this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
         this.#UIManager.updateTopUI(this.#selectedCock.nombre,this.#selectedCock.poder);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
+        this.#UIManager.updateShieldUI(this.#selectedCock.shields);
     }
 
     draw(ctx, sprite_id, view1) {
@@ -72,11 +73,17 @@ class Player {
 
     recharge(amount){
         this.#selectedCock.recharge(amount);
+        this.#selectedCock.rechargeShield(amount);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
+        this.#UIManager.updateShieldUI(this.#selectedCock.shields);
     }
 
     useBullets(amount){
         this.#selectedCock.useBullets(amount);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
+    }
+    useShield(amount){
+        this.#selectedCock.useShield(amount);
+        this.#UIManager.updateShieldUI(this.#selectedCock.shields);    
     }
 }

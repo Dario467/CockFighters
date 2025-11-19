@@ -162,7 +162,7 @@
             }
             .cock_box1{
                 position: absolute; 
-                top: 408px; 
+                top: 418px; 
                 left: 655px;
                 border-radius: 10px 30px 10px 30px;
                 border: 1.8px solid #000000;
@@ -172,7 +172,7 @@
             }
             .cock_box2{
                 position: absolute; 
-                top: 25px; 
+                top: 35px; 
                 left: 50px;
                 border-radius: 10px 30px 10px 30px;
                 border: 1.8px solid #000000;
@@ -232,6 +232,12 @@
                 left: 0px; 
                 width: 100%;
             }
+            .shield_section{
+                display: flex;
+                position: absolute;
+                top: -25px;
+                width: 100%;
+            }
             .bullet_container{
                 display: flex;
                 flex-direction: row;
@@ -241,10 +247,22 @@
                 width: 100%;
                 justify-content: flex-end;
             }
+            .shield_container{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                width: 100%;
+                
+                
+            }
             .img_bullet{
                 height: 30px; 
                 width: 40px;
                 margin-left: -25px;
+            }
+            .img_shield{
+                height: 20px; 
+                width: 20px;
             }
             .hidden { display:none; }
         </style>
@@ -268,6 +286,12 @@
         <div class="center_in_navbar" id="player1Area">
             <div style="position: relative;">
                 <div class="cock_box1">
+                    <div class="shield_section">
+                        <div class="shield_container shield1">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                        </div>
+                    </div>
                     <div class="name_section top1_bar">
                         <p class="text2">JUGADOR1</p>
                         <p class="text2">Poder: 10</p>
@@ -291,6 +315,12 @@
                 </div>
 
                 <div class="cock_box2">
+                    <div class="shield_section">
+                        <div class="shield_container shield2">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                        </div>
+                    </div>
                     <div class="name_section top2_bar">
                         <p class="text2">JUGADOR2</p>
                         <p class="text2">Poder: 10</p>
@@ -351,6 +381,12 @@
         <div class="center_in_navbar" id="player2Area">
             <div style="position: relative;">
                 <div class="cock_box1">
+                    <div class="shield_section">
+                        <div class="shield_container shield2">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                        </div>
+                    </div>
                     <div class="name_section top2_bar">
                         <p class="text2">JUGADOR2</p>
                         <p class="text2">Poder: 10</p>
@@ -374,6 +410,12 @@
                 </div>
 
                 <div class="cock_box2">
+                    <div class="shield_section">
+                        <div class="shield_container shield1">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                            <img src="https://img1.picmix.com/output/stamp/normal/4/5/1/1/551154_f9f85.png" class="img_shield">
+                        </div>
+                    </div>
                     <div class="name_section top1_bar">
                         <p class="text2">JUGADOR1</p>
                         <p class="text2">Poder: 10</p>

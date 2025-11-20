@@ -1,5 +1,5 @@
 class Action{
-    constructor(nombre,costo, acc){
+    constructor(nombre,costo){
 
     }
 }

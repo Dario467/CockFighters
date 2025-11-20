@@ -14,19 +14,19 @@ let in_animation = false;
 c2.fillRect(0,0,canvas2.width, canvas2.height);
 
 const player1 = new Player({
-    x:100,
-    y:0+canvas.height-240
+    x:75,
+    y:0+canvas.height-250
 },
 {
     x:canvas.width-480,
     y:60
 },
 {
-    x:340,
-    y:240
+    x:370,
+    y:250
 },
 [
-  new Cock("GunCock",15,12,6,["/Assets/gallo_sprite_front1.png","/Assets/gallo_sprite_front.png"])
+  new Cock("CYBER COCK",15,12,6,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"])
 ],
 1);
 
@@ -35,17 +35,23 @@ const player2 = new Player({
     y:60
 },
 {
-    x:100,
-    y:0+canvas.height-240
+    x:75,
+    y:0+canvas.height-250
 },
 {
-    x:340,
-    y:240
+    x:370,
+    y:250
 },
 [
-  new Cock("GunCock",20,8,6,["/Assets/gallo_sprite_front1.png","/Assets/gallo_sprite_front.png"])
+  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"])
 ],
 2);
+
+const battle = new Battle(player1,player2);
+
+function chooseMove(playerId, moveIndex) {
+    battle.playerChooseMove(playerId, moveIndex);
+};
 
 function gameLoop() {
   if (!awake){
@@ -53,8 +59,8 @@ function gameLoop() {
     console.log("Game Started");
     player1.player_awake();
     player2.player_awake();
-    animationMove(player2, 900, 1,400);
-    animationMove(player1, -300, 1,-400);
+    animationMove(player2, 945, 1,400);
+    animationMove(player1, -325, 1,-400);
   }
   c.fillStyle = "lightgray";
   c.fillRect(0,0,canvas.width, canvas.height);

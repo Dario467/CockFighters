@@ -61,6 +61,10 @@ class Player {
         return this.#player;
     }
 
+    get selectedCock(){
+        return this.#selectedCock;
+    }
+
     damage(amount) {
         this.#selectedCock.damage(amount);
         this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);

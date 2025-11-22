@@ -4,6 +4,7 @@ class UIManager{
     #uiHealthNum;
     #uiBullets;
     #uiShield;
+    #uiActionMenu;
 
     constructor(player){
         this.Awake(player)
@@ -16,12 +17,88 @@ class UIManager{
             this.#uiHealthNum = document.querySelectorAll(".health_n1");
             this.#uiBullets = document.querySelectorAll(".bullet1");
             this.#uiShield = document.querySelectorAll(".shield1");
+            this.#uiActionMenu = document.getElementById("cardMenu1");
         }else{
             this.#uiHealthBar = document.querySelectorAll(".p2_bar");
             this.#uiTopBar = document.querySelectorAll(".top2_bar");
             this.#uiHealthNum = document.querySelectorAll(".health_n2");
             this.#uiBullets = document.querySelectorAll(".bullet2");
             this.#uiShield = document.querySelectorAll(".shield2");
+            this.#uiActionMenu = document.getElementById("cardMenu2");
+        }
+    }
+
+    async updateTextBoxUI(text,speed,loading = false){
+        this.#uiActionMenu.innerHTML = `
+        <div class="card_container">
+            <div class="card textCenter txt_box" style="width:1030px; height:170px">
+                <p class="box_txt action_txt"></p>
+            </div>
+        </div>
+        `;
+        if(loading){
+            let actionText = this.#uiActionMenu.querySelector(".action_txt");
+            this.type(actionText, text, speed);
+            let img1 = document.createElement("img");
+            img1.src = "https://i.pinimg.com/originals/a4/f2/cb/a4f2cb80ff2ae2772e80bf30e9d78d4c.gif"
+            img1.className = "next";
+            this.#uiActionMenu.querySelector(".txt_box").appendChild(img1);
+        }else{
+            let actionText = this.#uiActionMenu.querySelector(".action_txt");
+            await this.type(actionText, text, speed);
+            let img1 = document.createElement("img");
+            img1.src = "https://cdn-icons-png.flaticon.com/512/3416/3416083.png";
+            img1.className = "next";
+            this.#uiActionMenu.querySelector(".txt_box").appendChild(img1);
+        }
+    }
+
+    textBoxMenuDisplay(player, actions){
+         this.#uiActionMenu.innerHTML = `
+         <div class="card_container">
+                <div class="card textback" style="width:764px; height:170px">
+                    <h2 class="title_txt">Selector de acciones</h2>
+                    <div class="containerButtons">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card_container">
+                <div class="card textback" style="width:258px; height:170px">
+                    <h2 class="title_txt">Cambiar Gallo</h2>
+                    <div class="container">
+                        <div class="gallo-card selected-gallo" style="width:90px; height:90px">
+                            <img src="/Assets/gallo_sprite_front1.png" width="90" height="90">
+                        </div>
+                        <div class="gallo-card" style="width:90px; height:90px">
+                            <img src="/Assets/cyber_cock_back.png" width="90" height="90">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        let button_cont = this.#uiActionMenu.querySelector(".containerButtons");
+        let i = 0;
+        for(let i = 0; i < actions.length; i++){
+            let action = actions[i];
+            let boton = document.createElement("button");
+            boton.className = "action-button";
+            boton.onclick = () => chooseMove(player, i);
+            boton.innerText = action;
+            button_cont.appendChild(boton);
+        }
+    }
+
+    async type(elem, text, speed) {
+        elem.innerHTML = "";
+        for (let char of text) {
+            if(char === "°"){
+                elem.innerHTML += "<br>";
+            }else{
+                elem.innerHTML += char;
+            }
+            await new Promise(res => setTimeout(res, speed));
         }
     }
 

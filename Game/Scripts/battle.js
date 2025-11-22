@@ -11,44 +11,40 @@ class Battle {
         }else{
             player = this.p2
         }
-        console.log(player.selectedCock.nombre + " eligió el movimiento " + moveIndex);
-
-        //player.chooseMove(moveIndex);
-
-        // si ambos eligieron, procesamos el turno
-        //if (this.p1.selectedMove && this.p2.selectedMove) {
+        player.chooseAction(moveIndex);
+        
+        if(player.selectAction){
+            console.log(player.selectedCock.nombre + " ha selecciondo " + player.selectAction.nombre)
+            player.UIManager.updateTextBoxUI("Se ha seleccionado tu acción°Esparando a que el otro jugador realice su acción",15,true);
+        }
+        if (this.p1.selectAction && this.p2.selectAction) {
             //this.resolveTurn();
+            this.p1.UIManager.updateTextBoxUI("listo",20);
+            this.p2.UIManager.updateTextBoxUI("listo",20);
+        }
+        
+        //if(actionDefinitions[player.selectAction].canUse(player.selectedCock)){
+            //actionDefinitions[player.selectAction].execute(player,player2);    
+        //}else{
+            //console.log("No se puede usar la acción");
         //}
     }
 
     resolveTurn() {
-        // prioridad simple: primero player 1, luego player 2
-        this.executeMove(this.p1, this.p2);
-        if (this.p2.cock.vida > 0) { 
+        if(this.p1.selectedMove.tipo === "prioritario"){
+            this.executeMove(this.p1, this.p2);
+        }else{
             this.executeMove(this.p2, this.p1);
         }
 
-        this.endTurn();
+        //if (this.p2.cock.vida > 0) { 
+            //this.executeMove(this.p2, this.p1);
+        //}
+        //this.endTurn();
     }
 
-    executeMove(attacker, defender) {
-        const move = attacker.selectedMove;
-        if (!move) return;
+    executeMove(first, second) {
 
-        // checar recursos (balas/energía)
-        if (attacker.cock.bullets < move.cost) {
-            console.warn(attacker.id, "no tiene balas suficientes");
-            return;
-        }
-
-        attacker.cock.bullets -= move.cost;
-
-        move.execute(attacker.cock, defender.cock);
-
-        // ACTUALIZAR UI
-        this.ui.updateHealth(defender.id, defender.cock.vida, defender.cock.vidaMax);
-        this.ui.updateBullets(attacker.id, attacker.cock.bullets, attacker.cock.bulletsMax);
-        this.ui.playAttackAnimation(attacker.id, move.type);
     }
 
     endTurn() {

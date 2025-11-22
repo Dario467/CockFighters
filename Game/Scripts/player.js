@@ -11,6 +11,7 @@ class Player {
     #position;
     #position2;
     #selectedCock;
+    #selectAction;
     #player;
 
     constructor(position, position2, scale, cocks, player) {
@@ -20,6 +21,7 @@ class Player {
         this.cocks = cocks;
         this.#selectedCock = cocks[0];
         this.player = player;
+        this.#selectAction = null;
     }
 
     player_awake() {
@@ -63,6 +65,18 @@ class Player {
 
     get selectedCock(){
         return this.#selectedCock;
+    }
+
+    get selectAction(){
+        return this.#selectAction;
+    }
+
+    get UIManager(){
+        return this.#UIManager;
+    }
+
+    chooseAction(moveIndex){
+        this.#selectAction = actionDefinitions[this.#selectedCock.acciones[moveIndex]];
     }
 
     damage(amount) {

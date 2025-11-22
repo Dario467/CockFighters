@@ -10,7 +10,7 @@ canvas2.height = 576;
 let awake = false;
 let in_animation = false;
 
-//c.fillRect(0,0,canvas.width, canvas.height);
+c.fillRect(0,0,canvas.width, canvas.height);
 c2.fillRect(0,0,canvas2.width, canvas2.height);
 
 const player1 = new Player({
@@ -26,7 +26,7 @@ const player1 = new Player({
     y:250
 },
 [
-  new Cock("CYBER COCK",15,12,6,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"])
+  new Cock("CYBER COCK",15,12,6,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge"])
 ],
 1);
 
@@ -43,7 +43,7 @@ const player2 = new Player({
     y:250
 },
 [
-  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"])
+  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge"])
 ],
 2);
 

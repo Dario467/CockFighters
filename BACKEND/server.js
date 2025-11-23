@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const conectarDB = require('./db');
 const Gallo = require('./models/Gallos');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../FRONTEND')));
 app.use('/Assets', express.static(path.join(__dirname, '../Assets')));
+app.use('/Game', express.static(path.join(__dirname, '../Game')));
 
 app.post('/create-checkout-session', async (req, res) => {
   const { priceId } = req.body;

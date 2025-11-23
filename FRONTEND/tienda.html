@@ -288,7 +288,7 @@
 <body>
 
     <nav class="navbar navbar-expand-sm navbar-dark mi-navbar justify-content-center">
-        <a class="button" href="/FRONTEND/views/menuP.html">Volver al Juego</a>
+        <a class="button" href="/views/menuP.html">Volver al Juego</a>
         <img class="nav-img" src="../Assets/interface/cockFighterTitulo.png" width="187" height="56" alt="Cock Fighters">
     </nav>
 
@@ -304,7 +304,8 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, voluptates. Sit doloremque nemo, ut porro incidunt quae. Dignissimos, ad inventore. Adipisci perspiciatis recusandae molestiae illum quasi harum, magnam consequuntur optio?
                 </p>
                 <div class="product-price">$499.00</div>
-                <button class="btn-buy" onclick="openConfirmModal('Gallo Legendario', 499)">Comprar Ahora</button>
+                <!-- CAMBIA price_XXX_FONDO1 por tu priceId real -->
+                <button class="btn-buy" onclick="openConfirmModal('Gallo Legendario', 499, 'price_1SWS362OiL7seYk7tkzM5nsb')">Comprar Ahora</button>
             </div>
 
             <!-- Producto 2 -->
@@ -315,7 +316,8 @@
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat nam, quas praesentium, omnis sint deleniti dignissimos temporibus beatae dolorem sunt quia. Esse velit deserunt ea aspernatur facere quis labore. Minus.    
                 </p>
                 <div class="product-price">$299.00</div>
-                <button class="btn-buy" onclick="openConfirmModal('BBC', 299)">Comprar Ahora</button>
+                <!-- CAMBIA price_XXX_FONDO2 por tu priceId real -->
+                <button class="btn-buy" onclick="openConfirmModal('BBC', 299, 'price_1SWS2Z2OiL7seYk7O7gVlSql')">Comprar Ahora</button>
             </div>
 
             <!-- Producto 3 -->
@@ -326,11 +328,13 @@
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta sapiente quaerat consectetur earum maiores pariatur quas aliquid, numquam assumenda blanditiis tempore mollitia qui sunt, quibusdam iusto, odit dolor excepturi quidem? 
                 </p>
                 <div class="product-price">$199.00</div>
-                <button class="btn-buy" onclick="openConfirmModal('El gallo de oro', 199)">Comprar Ahora</button>
+                <!-- CAMBIA price_XXX_FONDO3 por tu priceId real -->
+                <button class="btn-buy" onclick="openConfirmModal('El gallo de oro', 199, 'price_1SWS1J2OiL7seYk7zKoW2kQp')">Comprar Ahora</button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL CONFIRMACIÓN -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -353,12 +357,14 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <!-- AQUÍ ES DONDE REALMENTE SE HACE EL PAGO -->
                     <button type="button" class="btn btn-success" onclick="openPaymentModal()">Continuar al Pago</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL PAGO (ya no lo usamos para pedir tarjeta, Stripe se encarga) -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -367,51 +373,24 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    
-                    
-                    <div class="mb-3">
-                        <label for="cardNumber" class="form-label">Número de Tarjeta</label>
-                        <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="cardName" class="form-label">Nombre en la Tarjeta</label>
-                        <input type="text" class="form-control" id="cardName" placeholder="NOMBRE APELLIDO">
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="cardExpiry" class="form-label">Fecha de Expiración</label>
-                            <input type="text" class="form-control" id="cardExpiry" placeholder="MM/AA" maxlength="5">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="cardCVV" class="form-label">CVV</label>
-                            <input type="text" class="form-control" id="cardCVV" placeholder="123" maxlength="4">
-                        </div>
-                    </div>
-
-                    <div class="product-summary">
-                        <div class="summary-item">
-                            <span>Producto:</span>
-                            <span id="paymentProductName"></span>
-                        </div>
-                        <div class="summary-item summary-total">
-                            <span>Total a Pagar:</span>
-                            <span id="paymentProductPrice"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" onclick="backToConfirm()">Atrás</button>
-                    <button type="button" class="btn btn-success" onclick="processPayment()">Procesar Pago</button>
+                    <!-- Si quieres, aquí podrías poner un loader o un mensaje tipo:
+                         "Te estamos redirigiendo a Stripe..." -->
+                    <p style="text-align:center; color:#ff6b35; margin: 20px 0;">
+                        Redirigiendo a la pasarela de pago segura...
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        let currentProduct = { name: '', price: 0 };
+        // LLAVE PUBLICABLE DE STRIPE (MODO PRUEBA)
+        const stripe = Stripe('pk_test_51SWRbd2OiL7seYk7lpBzmqRw16LBpOdtXfVDkWQmlGw9BkCGmBJlwpdB3i2yWaeF1M3JTHgnkfszhHaGxA4wzmfV0052BJFqz8');
+
+        let currentProduct = { name: '', price: 0, priceId: '' };
         let confirmModalInstance, paymentModalInstance;
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -419,8 +398,9 @@
             paymentModalInstance = new bootstrap.Modal(document.getElementById('paymentModal'));
         });
 
-        function openConfirmModal(productName, price) {
-            currentProduct = { name: productName, price: price };
+        // Paso 1: usuario clic en "Comprar Ahora"
+        function openConfirmModal(productName, price, priceId) {
+            currentProduct = { name: productName, price: price, priceId: priceId };
             
             document.getElementById('confirmProductName').textContent = productName;
             document.getElementById('confirmProductPrice').textContent = `$${price.toFixed(2)}`;
@@ -428,64 +408,46 @@
             confirmModalInstance.show();
         }
 
-        function openPaymentModal() {
+        // Paso 2: usuario clic en "Continuar al Pago" -> aquí ya llamamos a Stripe
+        async function openPaymentModal() {
+            // opcional: mostramos un modal de "cargando"
             confirmModalInstance.hide();
-            
-            document.getElementById('paymentProductName').textContent = currentProduct.name;
-            document.getElementById('paymentProductPrice').textContent = `$${currentProduct.price.toFixed(2)}`;
-            
-            document.getElementById('cardNumber').value = '';
-            document.getElementById('cardName').value = '';
-            document.getElementById('cardExpiry').value = '';
-            document.getElementById('cardCVV').value = '';
-            
-            setTimeout(() => {
-                paymentModalInstance.show();
-            }, 300);
-        }
+            paymentModalInstance.show();
 
-        function backToConfirm() {
-            paymentModalInstance.hide();
-            setTimeout(() => {
-                confirmModalInstance.show();
-            }, 300);
-        }
+            try {
+                const response = await fetch('/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        priceId: currentProduct.priceId
+                    })
+                });
 
-        function processPayment() {
-            const cardNumber = document.getElementById('cardNumber').value;
-            const cardName = document.getElementById('cardName').value;
-            const cardExpiry = document.getElementById('cardExpiry').value;
-            const cardCVV = document.getElementById('cardCVV').value;
-            
-            if (!cardNumber || !cardName || !cardExpiry || !cardCVV) {
-                alert(' Por favor, completa todos los campos de pago.');
-                return;
+                const data = await response.json();
+
+                if (data.error) {
+                    console.error(data.error);
+                    alert('Error creando la sesión de pago en Stripe.');
+                    paymentModalInstance.hide();
+                    return;
+                }
+
+                const result = await stripe.redirectToCheckout({
+                    sessionId: data.id
+                });
+
+                if (result.error) {
+                    alert(result.error.message);
+                    paymentModalInstance.hide();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('No se pudo conectar con el servidor de pagos.');
+                paymentModalInstance.hide();
             }
-            
-            paymentModalInstance.hide();
-            
-            setTimeout(() => {
-                alert(` ¡Pago procesado exitosamente!\n\nProducto: ${currentProduct.name}\nTotal: $${currentProduct.price.toFixed(2)}\n\n¡Gracias por tu compra, gallero!`);
-            }, 300);
         }
-
-        document.getElementById('cardNumber').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '');
-            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
-            e.target.value = formattedValue;
-        });
-
-        document.getElementById('cardExpiry').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
-            }
-            e.target.value = value;
-        });
-
-        document.getElementById('cardCVV').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '');
-        });
     </script>
 </body>
 </html>

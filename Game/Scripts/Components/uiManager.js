@@ -85,7 +85,7 @@ class UIManager{
             let boton = document.createElement("button");
             boton.className = "action-button";
             boton.onclick = () => chooseMove(player, i);
-            boton.innerText = action;
+            boton.innerText = actionDefinitions[action].nombre;
             button_cont.appendChild(boton);
         }
     }

@@ -26,7 +26,7 @@ const player1 = new Player({
     y:250
 },
 [
-  new Cock("CYBER COCK",15,12,6,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge"])
+  new Cock("CYBER COCK",15,12,6,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"])
 ],
 1);
 
@@ -43,7 +43,7 @@ const player2 = new Player({
     y:250
 },
 [
-  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge"])
+  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack"])
 ],
 2);
 

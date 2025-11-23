@@ -13,6 +13,7 @@ class Player {
     #selectedCock;
     #selectAction;
     #player;
+    #haveShield;
 
     constructor(position, position2, scale, cocks, player) {
         this.#position = position;
@@ -20,8 +21,9 @@ class Player {
         this.scale = scale;
         this.cocks = cocks;
         this.#selectedCock = cocks[0];
-        this.player = player;
+        this.#player = player;
         this.#selectAction = null;
+        this.#haveShield = false;
     }
 
     player_awake() {
@@ -31,6 +33,7 @@ class Player {
         this.#UIManager.updateTopUI(this.#selectedCock.nombre,this.#selectedCock.poder);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
         this.#UIManager.updateShieldUI(this.#selectedCock.shields);
+        this.#UIManager.textBoxMenuDisplay(this.#player,this.#selectedCock.acciones);
     }
 
     draw(ctx, sprite_id, view1) {
@@ -75,33 +78,28 @@ class Player {
         return this.#UIManager;
     }
 
+    get haveShield(){
+        return this.#haveShield;
+    }
+
     chooseAction(moveIndex){
         this.#selectAction = actionDefinitions[this.#selectedCock.acciones[moveIndex]];
     }
 
-    damage(amount) {
-        this.#selectedCock.damage(amount);
-        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
+    removeAction(){
+        this.#selectAction = null;
     }
 
-    heal(amount){
-        this.#selectedCock.heal(amount);
-        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
+    activeShield(){
+        this.#haveShield = true;
     }
 
-    recharge(amount){
-        this.#selectedCock.recharge(amount);
-        this.#selectedCock.rechargeShield(amount);
+    rechargeUI(){
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
         this.#UIManager.updateShieldUI(this.#selectedCock.shields);
-    }
-
-    useBullets(amount){
-        this.#selectedCock.useBullets(amount);
+        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
-    }
-    useShield(amount){
-        this.#selectedCock.useShield(amount);
-        this.#UIManager.updateShieldUI(this.#selectedCock.shields);    
+        this.#UIManager.updateShieldUI(this.#selectedCock.shields);
+        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);    
     }
 }

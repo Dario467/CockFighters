@@ -9,6 +9,7 @@ class Cock {
         this.shields = 0;
         this.sprites = sprites;
         this.acciones = acciones;
+        this.curacion = 10;
     }
 
     damage(amount) {
@@ -39,7 +40,7 @@ class Cock {
         }
     }
 
-    rechargeShield(amount, max = 4){
+    rechargeShield(amount, max = 8){
         if(this.shields === 0){
             this.shields += 1;
         }

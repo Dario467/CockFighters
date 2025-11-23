@@ -2,6 +2,7 @@ class Battle {
     constructor(player1, player2) {
         this.p1 = player1;
         this.p2 = player2;
+        this.Msgstack = false;
     }
 
     playerChooseMove(playerId, moveIndex) {
@@ -12,15 +13,20 @@ class Battle {
             player = this.p2
         }
         player.chooseAction(moveIndex);
-        
+
         if(player.selectAction){
-            console.log(player.selectedCock.nombre + " ha selecciondo " + player.selectAction.nombre)
-            player.UIManager.updateTextBoxUI("Se ha seleccionado tu acción°Esparando a que el otro jugador realice su acción",15,true);
+            if(player.selectAction.canUse(player)){
+                console.log(player.selectedCock.nombre + " ha selecciondo " + player.selectAction.nombre)
+                player.UIManager.updateTextBoxUI("Se ha seleccionado tu acción°Esparando a que el otro jugador realice su acción",15,true);
+            }else{
+                console.log("No se puede usar la acción");
+                player.removeAction();
+            }
         }
         if (this.p1.selectAction && this.p2.selectAction) {
-            //this.resolveTurn();
             this.p1.UIManager.updateTextBoxUI("listo",20);
             this.p2.UIManager.updateTextBoxUI("listo",20);
+            this.resolveTurn();
         }
         
         //if(actionDefinitions[player.selectAction].canUse(player.selectedCock)){
@@ -31,12 +37,14 @@ class Battle {
     }
 
     resolveTurn() {
-        if(this.p1.selectedMove.tipo === "prioritario"){
-            this.executeMove(this.p1, this.p2);
-        }else{
+        if(this.p2.selectAction.tipo === "prioritario"){
             this.executeMove(this.p2, this.p1);
+        }else{
+            this.executeMove(this.p1, this.p2);
         }
-
+        this.p1.rechargeUI();
+        this.p2.rechargeUI();
+        console.log("hola");
         //if (this.p2.cock.vida > 0) { 
             //this.executeMove(this.p2, this.p1);
         //}
@@ -44,7 +52,10 @@ class Battle {
     }
 
     executeMove(first, second) {
-
+        let msg1 = first.selectAction.execute(first,second);
+        console.log(msg1);
+        let msg2 = second.selectAction.execute(second,first);
+        console.log(msg2);
     }
 
     endTurn() {

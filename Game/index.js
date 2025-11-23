@@ -43,7 +43,7 @@ const player2 = new Player({
     y:250
 },
 [
-  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack"])
+  new Cock("CUBETA KFC",20,8,6,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"])
 ],
 2);
 

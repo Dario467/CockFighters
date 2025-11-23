@@ -3,6 +3,7 @@ class Battle {
         this.p1 = player1;
         this.p2 = player2;
         this.Msgstack = false;
+        this.msgStack = [];
     }
 
     playerChooseMove(playerId, moveIndex) {
@@ -42,9 +43,6 @@ class Battle {
         }else{
             this.executeMove(this.p1, this.p2);
         }
-        this.p1.rechargeUI();
-        this.p2.rechargeUI();
-        console.log("hola");
         //if (this.p2.cock.vida > 0) { 
             //this.executeMove(this.p2, this.p1);
         //}
@@ -52,22 +50,43 @@ class Battle {
     }
 
     executeMove(first, second) {
-        let msg1 = first.selectAction.execute(first,second);
-        console.log(msg1);
-        let msg2 = second.selectAction.execute(second,first);
-        console.log(msg2);
+        let msg1 = {
+            action: first.selectAction,
+            msg: first.selectAction.execute(first,second)
+        };
+        let msg2 = {
+            action: second.selectAction,
+            msg: second.selectAction.execute(second,first)
+        };
+        this.msgStack.push(msg2);
+        this.msgStack.push(msg1);
+        this.nextFun()
+    }
+
+    nextFun(){
+        let actionObj = null;
+        if(this.msgStack.length > 0) {
+            actionObj = this.msgStack.pop();
+            this.p1.UIManager.updateTextBoxUI(actionObj.msg,20);
+            this.p2.UIManager.updateTextBoxUI(actionObj.msg,20);
+        }else{
+
+        }
     }
 
     endTurn() {
+        this.p1.rechargeUI();
+        this.p2.rechargeUI();
+        console.log("hola");
         // limpiar
         this.p1.selectedMove = null;
         this.p2.selectedMove = null;
 
         // ¿Victoria?
-        if (this.p1.cock.vida <= 0) {
-            this.ui.matchEnd(2);
-        } else if (this.p2.cock.vida <= 0) {
-            this.ui.matchEnd(1);
-        }
+        //if (this.p1.cock.vida <= 0) {
+            //this.ui.matchEnd(2);
+        //} else if (this.p2.cock.vida <= 0) {
+            //this.ui.matchEnd(1);
+        //}
     }
 }

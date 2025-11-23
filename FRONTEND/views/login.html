@@ -15,7 +15,6 @@
             overflow-x: hidden;
         }
 
-        /* formato del header */
         .game-header {
             background: linear-gradient(180deg, rgba(212, 98, 31, 0.9) 0%, rgba(61, 36, 21, 0.9) 100%);
             padding: 20px 0;
@@ -33,7 +32,6 @@
             letter-spacing: 3px;
         }
 
-        /* contenedor principal */
         .main-container {
             display: flex;
             min-height: calc(100vh - 160px);
@@ -43,7 +41,6 @@
             justify-content: center;
         }
 
-        /* mucho texto del lado izquierdo (info)*/
         .info-section {
             flex: 1;
             max-width: 600px;
@@ -80,7 +77,6 @@
             position: relative;
         }
 
-        /* formulario del lado derecho*/
         .form-section-container {
             flex: 1;
             max-width: 550px;
@@ -127,20 +123,14 @@
             box-shadow: 0 0 20px rgba(212, 98, 31, 0.8);
         }
 
-        .form-section {
-            display: none;
-        }
-
-        .form-section.active {
-            display: block;
-        }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
 
         .form-label {
             color: #ff6b35;
             font-weight: bold;
             margin-bottom: 10px;
             font-size: 1.1rem;
-            display: block;
         }
 
         .form-control {
@@ -151,7 +141,6 @@
             border-radius: 10px;
             margin-bottom: 25px;
             font-size: 1.1rem;
-            width: 100%;
         }
 
         .form-control:focus {
@@ -159,11 +148,6 @@
             border-color: #ff6b35;
             color: white;
             box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
-            outline: none;
-        }
-
-        .form-control::placeholder {
-            color: rgba(212, 98, 31, 0.6);
         }
 
         .btn-primary {
@@ -185,13 +169,6 @@
         .btn-primary:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.7);
-            background: linear-gradient(135deg, #ff6b35 0%, #d4621f 100%);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .alert {
@@ -214,35 +191,10 @@
             color: #90ee90;
         }
 
-        .form-group {
-            position: relative;
-        }
-
-        .extra-info {
-            color: #d4621f;
-            font-size: 1rem;
-            text-align: center;
-            margin-top: 25px;
-        }
-
-        /* botones responsivos */
-        @media (max-width: 1024px) {
-            .main-container {
-                flex-direction: column;
-                padding: 30px;
-            }
-
-            .game-title {
-                font-size: 3rem;
-            }
-
-            .welcome-text {
-                font-size: 2rem;
-            }
-        }
     </style>
 </head>
 <body>
+
     <div class="game-header">
         <h1 class="game-title">
             <img src="/Assets/interface/cockFighterTitulo.png" alt="Cock Fighters" style="height: 100px;">
@@ -253,20 +205,19 @@
         <div class="info-section">
             <h2 class="welcome-text">Bienvenido Gallero!</h2>
             <p class="description">
-                Cock Fighter es un juego donde puedes combatir en línea en épicas peleas
-                de gallos. Desarrolla estrategias únicas, selecciona tus mejores gallos
-                y demuestra tu habilidad enfrentándote a otros jugadores.
+                Cock Fighter es un juego donde puedes combatir en línea en épicas peleas.
             </p>
+
             <ul class="features-list">
                 <li>Crea a tu entrenador </li>
-                <li>Selecciona tu equipo de gallos y combate </li>
-                <li>Pelea con otros jugadores </li>
-                <li>Demuestra quien es el mejor gallero</li>
+                <li>Selecciona tu equipo</li>
+                <li>Pelea con jugadores reales</li>
             </ul>
         </div>
 
         <div class="form-section-container">
             <div class="login-card">
+
                 <div id="alertContainer"></div>
 
                 <div class="form-tabs">
@@ -274,73 +225,125 @@
                     <button class="tab-btn" onclick="showTab('register')">Registrarse</button>
                 </div>
 
-                <!--formulario de login -->
+                <!-- FORM LOGIN -->
                 <div id="loginForm" class="form-section active">
-                    <div class="form-group">
-                        <label class="form-label">Usuario o Email</label>
-                        <input type="text" class="form-control" id="loginUsername" placeholder="Ingresa tu usuario">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="loginPassword" placeholder="Ingresa tu contraseña">
-                    </div>
+                    <label class="form-label">Usuario o Email</label>
+                    <input type="text" class="form-control" id="loginUsername">
 
-                    <!-- FIX: ruta corregida -->
-                    <a href="/views/menuP.html" class="btn btn-primary" style="text-decoration: none; display: block; text-align: center;">Entrar al Juego</a>
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="loginPassword">
+
+                    <button class="btn btn-primary" onclick="login()">Entrar al Juego</button>
                 </div>
 
-                <!-- formulario de registro -->
+                <!-- FORM REGISTRO -->
                 <div id="registerForm" class="form-section">
-                    <div class="form-group">
-                        <label class="form-label">Usuario</label>
-                        <input type="text" class="form-control" id="registerUsername" placeholder="Elige tu nombre de gallero">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" id="registerEmail" placeholder="tu@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="registerPassword" placeholder="Mínimo 6 caracteres">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Confirmar Contraseña</label>
-                        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Repite tu contraseña">
-                    </div>
+                    <label class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="registerUsername">
 
-                    <!-- FIX: ruta corregida -->
-                    <a href="/views/menuP.html" class="btn btn-primary" style="text-decoration: none; display: block; text-align: center;">Crear Cuenta</a>
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="registerEmail">
+
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="registerPassword">
+
+                    <label class="form-label">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" id="registerConfirmPassword">
+
+                    <button class="btn btn-primary" onclick="register()">Crear Cuenta</button>
                 </div>
 
-                <div class="extra-info">
-                    Listo para convertirte en el mejor gallero?
-                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        //función que permite cambiar las pestañas entre login y registro
-        function showTab(tab) {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const tabs = document.querySelectorAll('.tab-btn');
+<script>
 
-            // limpiar alertas
-            document.getElementById('alertContainer').innerHTML = '';
+const API_URL = "/api/auth";
 
-            if (tab === 'login') {
-                loginForm.classList.add('active');
-                registerForm.classList.remove('active');
-                tabs[0].classList.add('active');
-                tabs[1].classList.remove('active');
-            } else {
-                loginForm.classList.remove('active');
-                registerForm.classList.add('active');
-                tabs[0].classList.remove('active');
-                tabs[1].classList.add('active');
-            }
-        }
-    </script>
+function showAlert(message, type = "danger") {
+    document.getElementById("alertContainer").innerHTML = `
+        <div class="alert alert-${type}">${message}</div>
+    `;
+}
+
+// login
+async function login() {
+    const emailOrUsername = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!emailOrUsername || !password)
+        return showAlert("Debes llenar todos los campos.");
+
+    try {
+        const res = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ emailOrUsername, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) return showAlert(data.message);
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data._id);
+
+        showAlert("Inicio de sesión exitoso!", "success");
+
+        setTimeout(() => window.location.href = "/views/menuP.html", 800);
+
+    } catch (e) {
+        showAlert("Error al conectar con el servidor.");
+    }
+}
+
+// registro
+async function register() {
+    const username = document.getElementById("registerUsername").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value.trim();
+    const confirm = document.getElementById("registerConfirmPassword").value.trim();
+
+    if (!username || !email || !password || !confirm)
+        return showAlert("Completa todos los campos.");
+
+    if (password !== confirm)
+        return showAlert("Las contraseñas no coinciden.");
+
+    try {
+        const res = await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) return showAlert(data.message);
+
+        showAlert("Registro exitoso, inicia sesión.", "success");
+
+        showTab("login");
+
+    } catch (e) {
+        showAlert("Error al registrar.");
+    }
+}
+
+//cambiar de pestañas
+function showTab(tab) {
+    document.getElementById("alertContainer").innerHTML = "";
+
+    document.getElementById("loginForm").classList.toggle("active", tab === "login");
+    document.getElementById("registerForm").classList.toggle("active", tab === "register");
+
+    const buttons = document.querySelectorAll(".tab-btn");
+    buttons[0].classList.toggle("active", tab === "login");
+    buttons[1].classList.toggle("active", tab === "register");
+}
+
+</script>
 </body>
 </html>
+

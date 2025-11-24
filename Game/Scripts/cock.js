@@ -1,5 +1,5 @@
 class Cock {
-    constructor(nombre, vida, poder,bulletsMax, sprites, acciones) {
+    constructor(nombre, vida, poder,bulletsMax, cura, sprites, acciones) {
         this.nombre = nombre;
         this.vida = vida;
         this.vidaMax = vida;
@@ -9,7 +9,7 @@ class Cock {
         this.shields = 0;
         this.sprites = sprites;
         this.acciones = acciones;
-        this.curacion = 5;
+        this.curacion = cura;
     }
 
     damage(amount) {

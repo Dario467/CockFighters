@@ -17,36 +17,41 @@ const userSchema = new mongoose.Schema({
     email:     { type: String, required: true, unique: true },
     password:  { type: String, required: true },
 
-    creditCards: [cardSchema]
+    creditCards: [cardSchema],
+
+    // lista de gallos que posee el usuario (strings)
+    gallos: {
+        type: [String],
+        default: []
+    },
+
+    // lista de fondos (strings)
+    fondos: {
+        type: [String],
+        default: []
+    }
 
 }, { timestamps: true });
 
-// encriptación contraseña (CORREGIDO)
-userSchema.pre('save', async function () {
+// encriptación contraseña
+userSchema.pre('save', async function(next) {
 
-    // mongoose 7 NO usa next() en async
-    if (!this.isModified('password')) return;
+    if (!this.isModified('password')) return next();
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+
+    next();
 });
 
 // validar contraseña
-userSchema.methods.matchPassword = async function (enteredPassword) {
+userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// agregar tarjeta (CORREGIDO: createCipher → createCipheriv)
-userSchema.methods.addCreditCard = function (cardNumber, cardholderName, expMonth, expYear) {
-
-    const key = crypto.createHash('sha256')
-        .update(process.env.CARD_SECRET || 'secretkey123')
-        .digest();
-
-    const iv = crypto.randomBytes(16);
-
-    const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
-
+// agregar tarjeta
+userSchema.methods.addCreditCard = function(cardNumber, cardholderName, expMonth, expYear) {
+    const cipher = crypto.createCipher('aes-256-ctr', process.env.CARD_SECRET || 'secretkey123');
     let encrypted = cipher.update(cardNumber, 'utf8', 'hex');
     encrypted += cipher.final('hex');
 
@@ -57,7 +62,7 @@ userSchema.methods.addCreditCard = function (cardNumber, cardholderName, expMont
         last4,
         expMonth,
         expYear,
-        encryptedCard: iv.toString('hex') + ':' + encrypted
+        encryptedCard: encrypted
     });
 };
 

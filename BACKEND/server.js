@@ -9,6 +9,7 @@ const app = express();
 // Servir archivos estáticos del FRONTEND
 app.use(express.static(path.join(__dirname, '../FRONTEND')));
 app.use('/Assets', express.static(path.join(__dirname, '../Assets')));
+app.use('/Game', express.static(path.join(__dirname, '../Game')));
 
 //importaciones y conexiones
 const conectarDB = require('./src/config/database');

@@ -26,8 +26,8 @@ const player1 = new Player({
     y:250
 },
 [
-  new Cock("CYBER COCK",25,12,4,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"]),
-  new Cock("MAGALLO",30,10,4,["/Assets/magallo_back.png","/Assets/magallo_front.png"],["recharge","shield","attack","heal"])
+  new Cock("CYBER COCK",25,12,4,5,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"]),
+  new Cock("MAGALLO",30,10,4,5,["/Assets/magallo_back.png","/Assets/magallo_front.png"],["recharge","shield","attack","heal"])
 ],
 1);
 
@@ -44,8 +44,8 @@ const player2 = new Player({
     y:250
 },
 [
-  new Cock("CUBETA KFC",35,8,4,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"]),
-  new Cock("BIG BLACK COCK",10,20,4,["/Assets/big_black_cock_back.png","/Assets/big_black_cock_front1.png"],["recharge","shield","attack","heal"])
+  new Cock("CUBETA KFC",35,8,4,5,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"]),
+  new Cock("BIG BLACK COCK",10,20,4,5,["/Assets/big_black_cock_back.png","/Assets/big_black_cock_front1.png"],["recharge","shield","attack","heal"])
 ],
 2);
 

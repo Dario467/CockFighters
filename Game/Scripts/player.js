@@ -94,6 +94,10 @@ class Player {
         this.#haveShield = true;
     }
 
+    deactiveShield(){
+        this.#haveShield = false;
+    }
+
     rechargeUI(){
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
         this.#UIManager.updateShieldUI(this.#selectedCock.shields);

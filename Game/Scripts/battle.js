@@ -25,8 +25,6 @@ class Battle {
             }
         }
         if (this.p1.selectAction && this.p2.selectAction) {
-            this.p1.UIManager.updateTextBoxUI("listo",20);
-            this.p2.UIManager.updateTextBoxUI("listo",20);
             this.resolveTurn();
         }
         
@@ -51,15 +49,18 @@ class Battle {
 
     executeMove(first, second) {
         let msg1 = {
-            action: first.selectAction,
+            player: first,
+            otherPlayer: second,
             msg: first.selectAction.execute(first,second)
         };
         let msg2 = {
-            action: second.selectAction,
+            player: second,
+            otherPlayer: first,
             msg: second.selectAction.execute(second,first)
         };
         this.msgStack.push(msg2);
         this.msgStack.push(msg1);
+        console.log(this.msgStack);
         this.nextFun()
     }
 
@@ -67,10 +68,17 @@ class Battle {
         let actionObj = null;
         if(this.msgStack.length > 0) {
             actionObj = this.msgStack.pop();
-            this.p1.UIManager.updateTextBoxUI(actionObj.msg,20);
-            this.p2.UIManager.updateTextBoxUI(actionObj.msg,20);
+            if(actionObj.player.selectAction.tipo === "daño"){
+                actionObj.otherPlayer.rechargeUI();
+                this.p1.UIManager.updateTextBoxUI(actionObj.msg,20);
+                this.p2.UIManager.updateTextBoxUI(actionObj.msg,20);
+            }else{
+                actionObj.player.rechargeUI();
+                this.p1.UIManager.updateTextBoxUI(actionObj.msg,20);
+                this.p2.UIManager.updateTextBoxUI(actionObj.msg,20);
+            }
         }else{
-
+            this.endTurn();
         }
     }
 
@@ -79,8 +87,12 @@ class Battle {
         this.p2.rechargeUI();
         console.log("hola");
         // limpiar
-        this.p1.selectedMove = null;
-        this.p2.selectedMove = null;
+        this.p1.removeAction();
+        this.p2.removeAction();
+        this.p1.deactiveShield();
+        this.p2.deactiveShield();
+        this.p1.UIManager.textBoxMenuDisplay(this.p1.player, this.p1.selectedCock.acciones);
+        this.p2.UIManager.textBoxMenuDisplay(this.p2.player, this.p2.selectedCock.acciones);
 
         // ¿Victoria?
         //if (this.p1.cock.vida <= 0) {

@@ -49,6 +49,7 @@ class UIManager{
             let img1 = document.createElement("img");
             img1.src = "https://cdn-icons-png.flaticon.com/512/3416/3416083.png";
             img1.className = "next";
+            img1.onclick = () => battle.nextFun();
             this.#uiActionMenu.querySelector(".txt_box").appendChild(img1);
         }
     }

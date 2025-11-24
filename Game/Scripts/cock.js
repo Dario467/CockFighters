@@ -9,7 +9,7 @@ class Cock {
         this.shields = 0;
         this.sprites = sprites;
         this.acciones = acciones;
-        this.curacion = 10;
+        this.curacion = 5;
     }
 
     damage(amount) {

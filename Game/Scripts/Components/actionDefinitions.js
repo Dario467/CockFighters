@@ -27,7 +27,8 @@ const actionDefinitions = {
     attack: new Action("Disparar",1,"daño",{
         execute(attacker, defender){
             if(defender.haveShield){
-                return `${attacker.selectedCock.nombre} ataco. Pero no tuvo efecto ya que ${defender.selectedCock.nombre} ha bloqueado el ataque con su escudo.`;
+                attacker.selectedCock.useBullets(1);
+                return `${attacker.selectedCock.nombre} Disparo. Pero no tuvo efecto ya que ${defender.selectedCock.nombre} ha bloqueado el ataque con su escudo.`;
             }
             defender.selectedCock.damage(attacker.selectedCock.poder);
             attacker.selectedCock.useBullets(1);

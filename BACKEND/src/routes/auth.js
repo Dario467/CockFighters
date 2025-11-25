@@ -162,4 +162,43 @@ router.post('/team/:userId', async (req, res) => {
     }
 });
 
+// actualizar puntuación del usuario (set)
+router.post('/user/:userId/score', async (req, res) => {
+    const { userId } = req.params;
+    const { score } = req.body;
+
+    if (score === undefined || score === null) return res.status(400).json({ message: 'score requerido' });
+    const parsed = parseInt(score, 10);
+    if (isNaN(parsed)) return res.status(400).json({ message: 'score debe ser un entero' });
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        user.score = parsed;
+        await user.save();
+
+        const returned = user.toObject();
+        delete returned.password;
+        delete returned.creditCards;
+
+        return res.json(returned);
+    } catch (error) {
+        console.error('ERROR EN POST USER SCORE:', error);
+        return res.status(500).json({ message: 'Error al guardar puntuación' });
+    }
+});
+
+// obtener ranking global (top N)
+router.get('/ranking', async (req, res) => {
+    const limit = Math.min(parseInt(req.query.limit || '10', 10) || 10, 100);
+    try {
+        const users = await User.find({}).select('username score').sort({ score: -1 }).limit(limit);
+        return res.json(users);
+    } catch (error) {
+        console.error('ERROR EN GET RANKING:', error);
+        return res.status(500).json({ message: 'Error al obtener ranking' });
+    }
+});
+
 module.exports = router;

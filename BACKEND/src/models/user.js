@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
     }
 
     ,
-    // fondo seleccionado por el usuario (string) - 'default' por defecto
+    // fondo seleccionado por el usuario (string)
     selectedFondo: {
         type: String,
         default: 'default'

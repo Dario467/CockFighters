@@ -392,8 +392,8 @@
 
     <div class="container-custom">
         <div class="user-data-box">
-            <h4>Nombre de Usuario: JuanPerez</h4>
-            <p>Ranking Global: #153</p>
+            <h4 id="displayUsername">Nombre de Usuario: --</h4>
+            <p id="displayRanking">Ranking Global: #-</p>
         </div>
 
         <div class="gallos-section">
@@ -476,29 +476,15 @@
                         <th scope="col">Puntos</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Usuario1</td>
-                        <td>1500</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Usuario2</td>
-                        <td>1450</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Usuario3</td>
-                        <td>1400</td>
-                    </tr>
+                <tbody id="rankingBody">
+                    <!-- Ranking dinámico -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         window.selectedFondoRoute = null;
 
@@ -718,7 +704,7 @@
                 return map[key] || '';
             };
 
-            
+
             const applyFondo = (key) => {
                 if (!key || key === 'default') {
                     fondoPreview.textContent = 'Default';
@@ -837,7 +823,7 @@
                     }
                     const data = await res.json();
                     const fondoSaved = data.selectedFondo || value;
-                    
+
                     // Actualizar la variable global con la ruta del fondo seleccionado
                     if (fondoSaved === 'default' || !fondoSaved) {
                         window.selectedFondoRoute = null;
@@ -846,7 +832,7 @@
                         window.selectedFondoRoute = assetForKey(fondoSaved);
                         console.log('Fondo guardado en BD:', window.selectedFondoRoute);
                     }
-                    
+
                     // actualizar solo la previsualización del modal y cerrar (no tocar el fondo del menú principal)
                     applyFondo(fondoSaved);
                     const modalEl = document.getElementById('changeFondoModal');
@@ -866,6 +852,62 @@
         function logout() {
             window.location.href = 'login.html';
         }
+    </script>
+
+    <script>
+        // Cargar usuario y ranking
+        (function () {
+            const userId = localStorage.getItem('userId');
+            const displayUsername = document.getElementById('displayUsername');
+            const displayRanking = document.getElementById('displayRanking');
+            const rankingBody = document.getElementById('rankingBody');
+
+            async function loadUser() {
+                if (!userId) return;
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}`);
+                    if (!res.ok) return console.warn('No se pudo obtener usuario');
+                    const user = await res.json();
+                    displayUsername.textContent = `Nombre de Usuario: ${user.username || '--'}`;
+                } catch (err) {
+                    console.error('Error cargando usuario:', err);
+                }
+            }
+
+            //función para la carga del ranking
+            async function loadRanking() {
+                try {
+                    const res = await fetch('/api/auth/ranking?limit=10');
+                    if (!res.ok) return console.warn('No se pudo cargar ranking');
+                    const list = await res.json();
+                    rankingBody.innerHTML = '';
+                    list.forEach((u, idx) => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <th scope="row">${idx + 1}</th>
+                            <td>${u.username || '—'}</td>
+                            <td>${u.score || 0}</td>
+                        `;
+                        rankingBody.appendChild(tr);
+                    });
+
+                    // si el usuario está en la lista, mostrar su puesto
+                    if (userId) {
+                        const idx = list.findIndex(u => String(u._id) === String(userId) || u._id === userId);
+                        if (idx !== -1) displayRanking.textContent = `Ranking Global: #${idx + 1}`;
+                        else displayRanking.textContent = `Ranking Global: #${list.length >= 10 ? '>' + list.length : list.length}`;
+                    }
+                } catch (err) {
+                    console.error('Error cargando ranking:', err);
+                }
+            }
+
+            // inicializar
+            document.addEventListener('DOMContentLoaded', async () => {
+                await loadUser();
+                await loadRanking();
+            });
+        })();
     </script>
 </body>
 </html>

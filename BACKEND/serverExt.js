@@ -43,13 +43,35 @@ module.exports = (app, server, WebSocket, os, PORT) => {
             return;
         }
         ws.send(JSON.stringify({ type: "player_id", id: playerId }));
+        if(players[1] && players[2]) {
+            players[1].send(JSON.stringify({
+                type: "opponent_joined",
+                opponent: 2
+            }));
+            players[2].send(JSON.stringify({
+                type: "opponent_joined",
+                opponent: 1
+            }));
+        }
         ws.on("message", msg => {
+            const messageStr = msg.toString();
             for (const client of wss.clients) {
                 if (client !== ws && client.readyState === WebSocket.OPEN)
-                    client.send(msg);
+                    client.send(messageStr);
             }
         });
         ws.on("close", () => {
+            const opponentId = playerId === 1 ? 2 : 1;
+            const opponent = players[opponentId];
+            
+            // Notificar al oponente si está conectado
+            if (opponent && opponent.readyState === WebSocket.OPEN) {
+                opponent.send(JSON.stringify({
+                    type: "opponent_disconnected",
+                    playerId: playerId,
+                    message: `El jugador ${playerId} se ha desconectado`
+                }));
+            }
             if (players[1] === ws) players[1] = null;
             if (players[2] === ws) players[2] = null;
         });

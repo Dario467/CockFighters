@@ -37,6 +37,13 @@ const userSchema = new mongoose.Schema({
         default: 0
     }
 
+    ,
+    // fondo seleccionado por el usuario (string) - 'default' por defecto
+    selectedFondo: {
+        type: String,
+        default: 'default'
+    }
+
 }, { timestamps: true });
 
 // encriptación contraseña

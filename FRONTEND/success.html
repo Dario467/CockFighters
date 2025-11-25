@@ -24,7 +24,38 @@
 </head>
 <body>
   <h1>Pago exitoso</h1>
-  <p>Gracias por tu compra,</p>
-  <a href="/tienda.html">Volver a la tienda</a>
+  <p id="statusText">Procesando verificación de pago...</p>
+  <a id="backLink" href="/tienda.html" style="display:none;">Volver a la tienda</a>
+
+  <script>
+    async function finalizePurchase() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+      if (!sessionId) {
+        document.getElementById('statusText').textContent = 'No se encontró session_id en la URL.';
+        document.getElementById('backLink').style.display = 'inline-block';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/checkout-session?sessionId=${encodeURIComponent(sessionId)}`);
+        const data = await res.json();
+        if (!res.ok) {
+          document.getElementById('statusText').textContent = data.message || 'Error al verificar la compra.';
+          document.getElementById('backLink').style.display = 'inline-block';
+          return;
+        }
+
+        document.getElementById('statusText').textContent = data.message || 'Compra procesada con éxito.';
+        document.getElementById('backLink').style.display = 'inline-block';
+      } catch (err) {
+        console.error(err);
+        document.getElementById('statusText').textContent = 'Error al conectar con el servidor para finalizar la compra.';
+        document.getElementById('backLink').style.display = 'inline-block';
+      }
+    }
+
+    finalizePurchase();
+  </script>
 </body>
 </html>

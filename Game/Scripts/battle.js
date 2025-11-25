@@ -13,6 +13,7 @@ class Battle {
         }else{
             player = this.p2
         }
+        console.log(player);
         player.chooseAction(moveIndex);
 
         if(player.selectAction){
@@ -61,12 +62,13 @@ class Battle {
         this.msgStack.push(msg2);
         this.msgStack.push(msg1);
         console.log(this.msgStack);
-        this.nextFun()
+        this.nextTxt();
     }
 
-    nextFun(){
+    nextTxt(){
         let actionObj = null;
         if(this.msgStack.length > 0) {
+            console.log("next");
             actionObj = this.msgStack.pop();
             if(actionObj.player.selectAction.tipo === "daño"){
                 actionObj.otherPlayer.rechargeUI();

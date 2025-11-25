@@ -500,6 +500,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        window.selectedFondoRoute = null;
+
        document.addEventListener('DOMContentLoaded', async () => {
             const gallosList = document.getElementById('gallosList');
             const mainGalloImgs = document.querySelectorAll('.gallos-section .gallo img');
@@ -716,8 +718,7 @@
                 return map[key] || '';
             };
 
-            // applyFondo only updates the preview inside the modal.
-            // It must NOT change the main page background.
+            
             const applyFondo = (key) => {
                 if (!key || key === 'default') {
                     fondoPreview.textContent = 'Default';
@@ -725,6 +726,8 @@
                     fondoPreview.style.backgroundSize = '';
                     fondoPreview.style.backgroundRepeat = '';
                     fondoPreview.style.backgroundPosition = '';
+                    window.selectedFondoRoute = null;  // ← Guarda null para default
+                    console.log('Fondo seleccionado: Default (null)');
                 } else {
                     const url = assetForKey(key);
                     if (url) {
@@ -733,9 +736,13 @@
                         fondoPreview.style.backgroundSize = 'cover';
                         fondoPreview.style.backgroundRepeat = 'no-repeat';
                         fondoPreview.style.backgroundPosition = 'center';
+                        window.selectedFondoRoute = url;  // ← Guarda la ruta en la variable global
+                        console.log('Fondo seleccionado:', url);
                     } else {
                         fondoPreview.textContent = key;
                         fondoPreview.style.backgroundImage = '';
+                        window.selectedFondoRoute = null;
+                        console.log('Fondo no encontrado:', key);
                     }
                 }
             };
@@ -829,8 +836,19 @@
                         return;
                     }
                     const data = await res.json();
+                    const fondoSaved = data.selectedFondo || value;
+                    
+                    // Actualizar la variable global con la ruta del fondo seleccionado
+                    if (fondoSaved === 'default' || !fondoSaved) {
+                        window.selectedFondoRoute = null;
+                        console.log('Fondo guardado en BD: Default (null)');
+                    } else {
+                        window.selectedFondoRoute = assetForKey(fondoSaved);
+                        console.log('Fondo guardado en BD:', window.selectedFondoRoute);
+                    }
+                    
                     // actualizar solo la previsualización del modal y cerrar (no tocar el fondo del menú principal)
-                    applyFondo(data.selectedFondo || value);
+                    applyFondo(fondoSaved);
                     const modalEl = document.getElementById('changeFondoModal');
                     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                     modalInstance.hide();

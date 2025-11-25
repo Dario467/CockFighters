@@ -105,10 +105,7 @@ if (process.env.STRIPE_SECRET_KEY) {
             const user = await User.findById(userId);
             if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
 
-            // reglas:
-            // - si compra paquete 'all' (productKey === 'all') y user.fondos no está vacío => rechazar
-            // - si user.fondos incluye 'all' => no puede comprar individuales
-            // - si ya tiene el productKey => no volver a comprar
+            
 
             const alreadyHasAll = user.fondos && user.fondos.includes('all');
             const alreadyHasProduct = user.fondos && user.fondos.includes(productKey);

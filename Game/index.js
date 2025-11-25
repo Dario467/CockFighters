@@ -1,3 +1,44 @@
+async function connectWS() {
+    const res = await fetch("/ip");
+    const data = await res.json();
+
+    const serverIP = data.ip;
+    console.log("Conectando a WS:", serverIP);
+    console.log(`\nUsa el link: http://${serverIP}:3000 para invitar a otro jugador.\n\n`);
+
+    window.ws = new WebSocket(`ws://${serverIP}:3000`);
+
+    ws.onopen = () => console.log("WS conectado");
+    ws.onerror = e => console.error("WS error", e);
+    ws.onmessage = e => {
+        const data = JSON.parse(e.data);
+
+        if (data.type === "player_id") {
+          console.log("Soy el jugador:", data.id);
+          if (data.id === 1) {
+            document.getElementById("player1Area").style.display = "";
+            document.getElementById("player2Area").style.display = "none";
+          }
+          else if (data.id === 2) {
+            document.getElementById("player1Area").style.display = "none";
+            document.getElementById("player2Area").style.display = "";
+          }
+          return;
+        }
+
+        if (data.type === "move") {
+            battle.playerChooseMove(data.player, data.move);
+        }
+
+        if(data.type === "server_full") {
+            alert("El servidor del juego está lleno. Intenta más tarde.");
+            window.location.href = "menuP.html";
+        }
+    };
+}
+
+connectWS();
+
 const canvas = document.getElementById("canvas1");
 const c = canvas.getContext("2d");
 const canvas2 = document.getElementById("canvas2");

@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
     fondos: {
         type: [String],
         default: []
+    },
+
+    //puntuación global de usuario
+    score: {
+        type: Number,
+        default: 0
     }
 
 }, { timestamps: true });

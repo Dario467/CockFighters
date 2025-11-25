@@ -1,12 +1,17 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const WebSocket = require("ws");
+const http = require("http");
+const os = require("os");
+
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 //crear app
 const app = express();
 
 // Servir archivos estáticos del FRONTEND
+app.use('/views', express.static(path.join(__dirname, '../FRONTEND/views')));
 app.use(express.static(path.join(__dirname, '../FRONTEND')));
 app.use('/Assets', express.static(path.join(__dirname, '../Assets')));
 app.use('/Game', express.static(path.join(__dirname, '../Game')));
@@ -84,7 +89,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../FRONTEND/views/login.html'));
 });
 
-//inicia el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+//servidor Ws para el juego
+
+const server = http.createServer(app);
+
+require('./serverExt')(app,server, WebSocket, os, PORT);

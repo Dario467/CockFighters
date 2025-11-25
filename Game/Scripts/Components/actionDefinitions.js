@@ -8,7 +8,7 @@ const actionDefinitions = {
         }
     },{
         canUse(attacker){
-            return attacker.selectedCock.bullets < attacker.selectedCock.bulletsMax && attacker.selectedCock.shields < 8;
+            return attacker.selectedCock.bullets < attacker.selectedCock.bulletsMax || attacker.selectedCock.shields < 8;
         }
     }),
 
@@ -40,7 +40,7 @@ const actionDefinitions = {
         }
     }),
 
-    heal: new Action("Botequin",1,"prioritario",{
+    heal: new Action("Botiquin",1,"prioritario",{
         execute(attacker, defender){
             attacker.selectedCock.useShield(1);
             attacker.selectedCock.heal(attacker.selectedCock.curacion);

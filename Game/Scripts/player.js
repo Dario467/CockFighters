@@ -15,7 +15,7 @@ class Player {
     #player;
     #haveShield;
 
-    constructor(position, position2, scale, cocks, player) {
+    constructor(position, position2, scale, cocks, player,background) {
         this.#position = position;
         this.#position2 = position2;
         this.scale = scale;
@@ -24,6 +24,7 @@ class Player {
         this.#player = player;
         this.#selectAction = null;
         this.#haveShield = false;
+        this.background = background;
     }
 
     player_awake() {

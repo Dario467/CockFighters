@@ -14,7 +14,36 @@ async function connectWS() {
     }
     ws = new WebSocket(`ws://${serverIP}:3000`);
 
-    ws.onopen = () => console.log("WS conectado");
+    ws.onopen = async() =>{
+      console.log("WS conectado");
+      const userId = localStorage.getItem('userId');
+      console.log("User ID:", userId);
+      const respuesta = await fetch('/api/gallos');
+      misGallosGlobal = await respuesta.json();
+      console.log("Mis gallos:", misGallosGlobal);
+      let savedGallos = [];
+      if (userId) {
+          try {
+              const teamRes = await fetch(`/api/auth/team/${userId}`);
+              if (teamRes.ok) {
+                  const teamData = await teamRes.json();
+                  savedGallos = teamData.gallos || [];
+              }
+          } catch (teamErr) {
+              console.warn('No se pudo cargar el equipo guardado:', teamErr);
+          }
+      }
+      console.log("Gallos guardados:", savedGallos);
+      let miEquipo = [];
+      miEquipo.push(misGallosGlobal.find(g => g._id === savedGallos[0]));
+      miEquipo.push(misGallosGlobal.find(g => g._id === savedGallos[1]));
+      console.log("Mi equipo final:", miEquipo);
+
+      ws.send(JSON.stringify({
+        type: "set_team",
+        team: miEquipo
+      }));
+    } 
     ws.onclose = () => {
         console.log("Te has desconectado del servidor");
         alert("Se perdió la conexión con el servidor");
@@ -26,6 +55,7 @@ async function connectWS() {
 
         if (data.type === "player_id") {
           console.log("Soy el jugador:", data.id);
+          console.log("Mi equipo es:", data.team[0].nombre);
           if (data.id === 1) {
             document.getElementById('shareModal').classList.remove('hidden');
             player1 = crearPlayer1();
@@ -215,7 +245,8 @@ function crearPlayer1(){
   new Cock("CYBER COCK",25,12,4,5,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"]),
   new Cock("MAGALLO",30,10,4,5,["/Assets/magallo_back.png","/Assets/magallo_front.png"],["recharge","shield","attack","heal"])
   ],
-  1);
+  1,
+  "/Assets/FONDO_bosque.jpg");
 }
 
 function crearPlayer2(){
@@ -235,5 +266,6 @@ function crearPlayer2(){
     new Cock("CUBETA KFC",35,8,4,5,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"]),
     new Cock("BIG BLACK COCK",10,20,4,5,["/Assets/big_black_cock_back.png","/Assets/big_black_cock_front1.png"],["recharge","shield","attack","heal"])
   ],
-  2);
+  2,
+  "/Assets/FONDO_bosque.jpg");
 }

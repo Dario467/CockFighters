@@ -29,7 +29,7 @@ module.exports = (app, server, WebSocket, os, PORT) => {
 
     const wss = new WebSocket.Server({ server});
 
-    wss.on("connection", ws => {
+    wss.on("connection", async (ws) => { 
         let playerId = null;
         if (!players[1]) {
             playerId = 1;
@@ -42,19 +42,31 @@ module.exports = (app, server, WebSocket, os, PORT) => {
             ws.close();
             return;
         }
-        ws.send(JSON.stringify({ type: "player_id", id: playerId }));
-        if(players[1] && players[2]) {
-            players[1].send(JSON.stringify({
-                type: "opponent_joined",
-                opponent: 2
-            }));
-            players[2].send(JSON.stringify({
-                type: "opponent_joined",
-                opponent: 1
-            }));
-        }
+
         ws.on("message", msg => {
             const messageStr = msg.toString();
+            const data = JSON.parse(messageStr);
+            if (data.type === "set_team") {
+                playerTeam = data.team;
+                
+                ws.send(JSON.stringify({ 
+                    type: "player_id", 
+                    id: playerId,
+                    team: playerTeam
+                }));
+
+                if(players[1] && players[2]) {
+                    players[1].send(JSON.stringify({
+                        type: "opponent_joined",
+                        opponent: 2
+                    }));
+                    players[2].send(JSON.stringify({
+                        type: "opponent_joined",
+                        opponent: 1
+                    }));
+                }
+                return;
+            }
             for (const client of wss.clients) {
                 if (client !== ws && client.readyState === WebSocket.OPEN)
                     client.send(messageStr);

@@ -58,7 +58,7 @@
         .gallos-section {
             border: 4px solid #d4621f;
             background: rgba(0, 0, 0, 0.85);
-            padding: 10px;
+            padding: 10px 60px;
             grid-column: 1 / 2;
             grid-row: 2 / 3;
             min-height: 80px;
@@ -78,8 +78,8 @@
         }
 
         .gallo img {
-            width: 60px;
-            height: 60px;
+            width: 100px;
+            height: 100px;
             transition: transform 0.3s;
         }
 
@@ -401,7 +401,7 @@
                 <img id="galloPrincipal" src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png" alt="gallo 1">
             </div>
             <div class="gallo img">
-                <img  id="galloPrincipal" src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png" alt="gallo 2">
+                <img id="galloSecondary" src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png" alt="gallo 2">
             </div>
 
         </div>
@@ -410,50 +410,53 @@
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editTeamModal">
                 Editar Equipo
             </button>
+            <button type="button" class="btn btn-secondary ms-2" id="changeFondoBtn" data-bs-toggle="modal" data-bs-target="#changeFondoModal">
+                Cambiar Fondo
+            </button>
 
             <div class="modal fade" id="editTeamModal" tabindex="-1" aria-labelledby="editTeamModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editTeamModalLabel">Seleccionar Gallos (Máx. 3)</h5>
+                            <h5 class="modal-title" id="editTeamModalLabel">Seleccionar Gallos (Exactamente 2)</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo1">
-                                    <label class="form-check-label" for="gallo1">Rayo Veloz</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo2">
-                                    <label class="form-check-label" for="gallo2">Furia Roja</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo3">
-                                    <label class="form-check-label" for="gallo3">Pico de Acero</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo4">
-                                    <label class="form-check-label" for="gallo4">Ala de Trueno</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo5">
-                                    <label class="form-check-label" for="gallo5">Garra Letal</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo6">
-                                    <label class="form-check-label" for="gallo6">El Gladiador</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="gallo7">
-                                    <label class="form-check-label" for="gallo7">Sombra Nocturna</label>
-                                </li>
+                            <ul id="gallosList" class="list-group">
+                                <!-- Lista de gallos se popula dinámicamente desde /api/gallos -->
                             </ul>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary">Guardar Selección</button>
+                            <button id="saveSelectionBtn" type="button" class="btn btn-primary">Guardar Selección</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Cambiar Fondo -->
+        <div class="modal fade" id="changeFondoModal" tabindex="-1" aria-labelledby="changeFondoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changeFondoModalLabel">Cambiar Fondo</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="form-label">Elige uno de tus fondos comprados o la opción por defecto:</p>
+                        <ul id="fondosList" class="list-group mb-3">
+                            <!-- Fondos se cargarán dinámicamente -->
+                        </ul>
+
+                        <div style="text-align:center;">
+                            <p class="form-label">Previsualización:</p>
+                            <div id="fondoPreview" style="width:100%;height:160px;border:2px solid #d4621f;border-radius:10px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#d4621f;">Default</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button id="saveFondoBtn" type="button" class="btn btn-primary">Guardar Fondo</button>
                     </div>
                 </div>
             </div>
@@ -498,35 +501,348 @@
     
     <script>
        document.addEventListener('DOMContentLoaded', async () => {
-            const checkboxes = document.querySelectorAll('#editTeamModal input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const checkedCount = document.querySelectorAll('#editTeamModal input[type="checkbox"]:checked').length;
-                    if (checkedCount > 3) {
-                        this.checked = false;
-                        alert('Solo puedes seleccionar un máximo de 3 gallos.');
-                    }
-                });
-            });
+            const gallosList = document.getElementById('gallosList');
+            const mainGalloImgs = document.querySelectorAll('.gallos-section .gallo img');
+            const saveBtn = document.getElementById('saveSelectionBtn');
+
+            // obtener ID del usuario desde localStorage (se guarda en login.html)
+            const userId = localStorage.getItem('userId');
+
+            // mantener datos y orden de selección
+            let misGallosGlobal = [];
+            const selectedOrder = []; // guardará índices en el orden que fueron seleccionados
 
             try {
                 const respuesta = await fetch('/api/gallos');
-                const misGallos = await respuesta.json();
+                misGallosGlobal = await respuesta.json();
 
-                if(misGallos.length > 0) {
-                    let variableSprite = misGallos[0].sprites.spriteFront; 
-                    
-                    
-                    const todasLasImagenes = document.querySelectorAll('.gallos-section .gallo img');
-
-                    
-                    todasLasImagenes.forEach(imagen => {
-                        imagen.src = variableSprite;
-                    });
+                // Si no hay gallos, mostramos mensaje
+                if (!Array.isArray(misGallosGlobal) || misGallosGlobal.length === 0) {
+                    gallosList.innerHTML = '<li class="list-group-item">No hay gallos disponibles</li>';
+                    return;
                 }
+
+                // Cargar equipo guardado del usuario
+                let savedGallos = [];
+                if (userId) {
+                    try {
+                        const teamRes = await fetch(`/api/auth/team/${userId}`);
+                        if (teamRes.ok) {
+                            const teamData = await teamRes.json();
+                            savedGallos = teamData.gallos || [];
+                        }
+                    } catch (teamErr) {
+                        console.warn('No se pudo cargar el equipo guardado:', teamErr);
+                    }
+                }
+
+                // Poblar la lista dinámicamente
+                gallosList.innerHTML = '';
+                misGallosGlobal.forEach((gallo, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex align-items-center';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'form-check-input me-2';
+                    checkbox.id = `gallo_chk_${index}`;
+                    checkbox.dataset.index = index;
+                    checkbox.dataset.galloId = gallo._id; // guardar ID del gallo
+
+                    const thumb = document.createElement('img');
+                    const spritePath = (gallo.sprites && (gallo.sprites.spriteFront || gallo.sprites.spriteBack)) || '/Assets/interface/cockFighterTitulo.png';
+                    thumb.src = spritePath;
+                    thumb.alt = gallo.nombre || 'gallo';
+                    thumb.style.width = '32px';
+                    thumb.style.height = '32px';
+                    thumb.style.objectFit = 'cover';
+                    thumb.style.marginRight = '12px';
+                    thumb.style.cursor = 'pointer';
+
+                    const label = document.createElement('label');
+                    label.className = 'form-check-label mb-0 flex-grow-1';
+                    label.htmlFor = checkbox.id;
+                    label.textContent = gallo.nombre || `Gallo ${index+1}`;
+
+                    // store sprite path and index on li for easy access
+                    li.dataset.sprite = spritePath;
+                    li.dataset.index = index;
+                    li.appendChild(checkbox);
+                    li.appendChild(thumb);
+                    li.appendChild(label);
+
+                    // Si este gallo está en savedGallos, marcarlo y añadirlo a selectedOrder
+                    if (savedGallos.includes(gallo._id)) {
+                        checkbox.checked = true;
+                        selectedOrder.push(index);
+                        li.classList.add('selected');
+                    }
+
+                    // Preview al hacer click en la miniatura (no cambia selección)
+                    thumb.addEventListener('click', () => {
+                        if (mainGalloImgs.length > 0) mainGalloImgs[0].src = li.dataset.sprite;
+                    });
+
+                    // Manejar selección: exactamente 2 (min y max). Mantener orden de selección.
+                    checkbox.addEventListener('change', (evt) => {
+                        const idx = Number(evt.target.dataset.index);
+
+                        if (evt.target.checked) {
+                            // si ya hay 2 seleccionados, no permitimos más
+                            if (selectedOrder.length >= 2) {
+                                evt.target.checked = false;
+                                alert('Solo puedes seleccionar exactamente 2 gallos.');
+                                return;
+                            }
+                            // añadir al orden
+                            selectedOrder.push(idx);
+                            li.classList.add('selected');
+                        } else {
+                            // remover del orden si se desmarca
+                            const pos = selectedOrder.indexOf(idx);
+                            if (pos !== -1) selectedOrder.splice(pos, 1);
+                            li.classList.remove('selected');
+                        }
+
+                        // Actualizar vista previa: primer seleccionado -> primario, segundo -> secundario
+                        if (mainGalloImgs.length > 0) {
+                            if (selectedOrder[0] !== undefined) {
+                                const s0 = misGallosGlobal[selectedOrder[0]];
+                                const s0path = (s0.sprites && (s0.sprites.spriteFront || s0.sprites.spriteBack)) || mainGalloImgs[0].src;
+                                mainGalloImgs[0].src = s0path;
+                            }
+                            if (selectedOrder[1] !== undefined && mainGalloImgs[1]) {
+                                const s1 = misGallosGlobal[selectedOrder[1]];
+                                const s1path = (s1.sprites && (s1.sprites.spriteFront || s1.sprites.spriteBack)) || mainGalloImgs[1].src;
+                                mainGalloImgs[1].src = s1path;
+                            } else if (mainGalloImgs[1]) {
+                                // si no hay segundo seleccionado, dejar fallback
+                                // no cambiar si ya tenía algo
+                            }
+                        }
+                    });
+
+                    gallosList.appendChild(li);
+                });
+
+                // Mostrar los gallos guardados en las imágenes principales
+                if (savedGallos.length >= 2) {
+                    // Buscar los objetos de gallos por sus IDs
+                    const primary = misGallosGlobal.find(g => g._id === savedGallos[0]);
+                    const secondary = misGallosGlobal.find(g => g._id === savedGallos[1]);
+
+                    if (primary && mainGalloImgs[0]) {
+                        const primaryPath = (primary.sprites && (primary.sprites.spriteFront || primary.sprites.spriteBack)) || mainGalloImgs[0].src;
+                        mainGalloImgs[0].src = primaryPath;
+                    }
+                    if (secondary && mainGalloImgs[1]) {
+                        const secondaryPath = (secondary.sprites && (secondary.sprites.spriteFront || secondary.sprites.spriteBack)) || mainGalloImgs[1].src;
+                        mainGalloImgs[1].src = secondaryPath;
+                    }
+                } else {
+                    // Si no hay equipo guardado, mostrar el sprite del primer gallo en ambas imágenes
+                    const firstSprite = (misGallosGlobal[0] && misGallosGlobal[0].sprites && (misGallosGlobal[0].sprites.spriteFront || misGallosGlobal[0].sprites.spriteBack));
+                    if (firstSprite) {
+                        if (mainGalloImgs[0]) mainGalloImgs[0].src = firstSprite;
+                        if (mainGalloImgs[1]) mainGalloImgs[1].src = firstSprite;
+                    }
+                }
+
+                // Guardar selección: aplicar solo si hay exactamente 2 seleccionados
+                saveBtn.addEventListener('click', async () => {
+                    if (selectedOrder.length !== 2) {
+                        alert('Debes seleccionar exactamente 2 gallos (primario y secundario).');
+                        return;
+                    }
+
+                    const primary = misGallosGlobal[selectedOrder[0]];
+                    const secondary = misGallosGlobal[selectedOrder[1]];
+                    const pPath = (primary.sprites && (primary.sprites.spriteFront || primary.sprites.spriteBack)) || mainGalloImgs[0].src;
+                    const sPath = (secondary.sprites && (secondary.sprites.spriteFront || secondary.sprites.spriteBack)) || mainGalloImgs[1].src;
+
+                    if (mainGalloImgs[0]) mainGalloImgs[0].src = pPath;
+                    if (mainGalloImgs[1]) mainGalloImgs[1].src = sPath;
+
+                    // Guardar en la BD si hay userId
+                    if (userId) {
+                        try {
+                            const gallosIds = [primary._id, secondary._id];
+                            const saveRes = await fetch(`/api/auth/team/${userId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ gallos: gallosIds })
+                            });
+
+                            if (saveRes.ok) {
+                                console.log('Equipo guardado en la BD');
+                            } else {
+                                console.error('Error al guardar equipo:', await saveRes.text());
+                            }
+                        } catch (saveErr) {
+                            console.error('Error al enviar equipo al servidor:', saveErr);
+                        }
+                    }
+
+                    // cerrar modal
+                    const modalEl = document.getElementById('editTeamModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                    modalInstance.hide();
+                });
+
             } catch (error) {
-                console.error("Error trayendo al gallo:", error);
+                console.error('Error trayendo al gallo:', error);
+                gallosList.innerHTML = '<li class="list-group-item">Error cargando gallos</li>';
             }
+        });
+
+        // ------------------ Cambiar Fondo (nuevo) ------------------
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = localStorage.getItem('userId');
+            const fondosList = document.getElementById('fondosList');
+            const fondoPreview = document.getElementById('fondoPreview');
+            const saveFondoBtn = document.getElementById('saveFondoBtn');
+
+            const assetForKey = (key) => {
+                const map = {
+                    nevado: '/Assets/FONDO_nevado.jpg',
+                    kfc: '/Assets/FONDO_kfc.jpg',
+                    pradera: '/Assets/FONDO_pradera.jpg',
+                    bosque: '/Assets/FONDO_bosque.jpg',
+                    desierto: '/Assets/FONDO_desierto.jpg',
+                    selva: '/Assets/FONDO_selva.jpg'
+                };
+                return map[key] || '';
+            };
+
+            // applyFondo only updates the preview inside the modal.
+            // It must NOT change the main page background.
+            const applyFondo = (key) => {
+                if (!key || key === 'default') {
+                    fondoPreview.textContent = 'Default';
+                    fondoPreview.style.backgroundImage = '';
+                    fondoPreview.style.backgroundSize = '';
+                    fondoPreview.style.backgroundRepeat = '';
+                    fondoPreview.style.backgroundPosition = '';
+                } else {
+                    const url = assetForKey(key);
+                    if (url) {
+                        fondoPreview.textContent = '';
+                        fondoPreview.style.backgroundImage = `url('${url}')`;
+                        fondoPreview.style.backgroundSize = 'cover';
+                        fondoPreview.style.backgroundRepeat = 'no-repeat';
+                        fondoPreview.style.backgroundPosition = 'center';
+                    } else {
+                        fondoPreview.textContent = key;
+                        fondoPreview.style.backgroundImage = '';
+                    }
+                }
+            };
+
+            // cargar fondos del usuario y selectedFondo
+            async function loadFondos() {
+                fondosList.innerHTML = '<li class="list-group-item">Cargando...</li>';
+                if (!userId) {
+                    fondosList.innerHTML = '<li class="list-group-item">Debes iniciar sesión para cambiar el fondo</li>';
+                    saveFondoBtn.disabled = true;
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}`);
+                    if (!res.ok) {
+                        fondosList.innerHTML = '<li class="list-group-item">Error al cargar fondos</li>';
+                        return;
+                    }
+                    const userData = await res.json();
+                    const fondos = userData.fondos || [];
+                    const selected = userData.selectedFondo || 'default';
+
+                    // construir lista: option default + compras
+                    fondosList.innerHTML = '';
+
+                    // Default option (radio)
+                    const liDefault = document.createElement('li');
+                    liDefault.className = 'list-group-item d-flex align-items-center';
+                    liDefault.innerHTML = `
+                        <input type="radio" name="fondo_choice" id="fondo_default" value="default" class="form-check-input me-2">
+                        <label for="fondo_default" class="form-check-label mb-0 flex-grow-1">Default</label>
+                    `;
+                    fondosList.appendChild(liDefault);
+
+                    // opciones compradas
+                    if (fondos.length === 0) {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = 'No tienes fondos comprados.';
+                        fondosList.appendChild(li);
+                    } else {
+                        fondos.forEach(key => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item d-flex align-items-center';
+                            const imgUrl = assetForKey(key);
+                            li.innerHTML = `
+                                <input type="radio" name="fondo_choice" id="fondo_${key}" value="${key}" class="form-check-input me-2">
+                                <img src="${imgUrl}" alt="${key}" style="width:48px;height:48px;object-fit:cover;margin-right:12px;border-radius:6px;">
+                                <label for="fondo_${key}" class="form-check-label mb-0 flex-grow-1">${key}</label>
+                            `;
+                            fondosList.appendChild(li);
+                        });
+                    }
+
+                    // marcar seleccionado actual
+                    const selInput = document.querySelector(`input[name='fondo_choice'][value='${selected}']`);
+                    if (selInput) selInput.checked = true;
+                    applyFondo(selected);
+
+                    // listeners de cambio para preview
+                    fondosList.querySelectorAll("input[name='fondo_choice']").forEach(r => {
+                        r.addEventListener('change', (e) => {
+                            applyFondo(e.target.value);
+                        });
+                    });
+
+                } catch (err) {
+                    console.error('Error cargando fondos:', err);
+                    fondosList.innerHTML = '<li class="list-group-item">Error al cargar fondos</li>';
+                }
+            }
+
+            // guardar fondo seleccionado
+            saveFondoBtn.addEventListener('click', async () => {
+                if (!userId) return alert('Debes iniciar sesión para guardar el fondo');
+                const selectedInput = document.querySelector("input[name='fondo_choice']:checked");
+                if (!selectedInput) return alert('Selecciona un fondo');
+                const value = selectedInput.value;
+
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}/fondo`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fondo: value })
+                    });
+                    if (!res.ok) {
+                        const txt = await res.text();
+                        console.error('Error guardando fondo:', txt);
+                        alert('No se pudo guardar el fondo');
+                        return;
+                    }
+                    const data = await res.json();
+                    // actualizar solo la previsualización del modal y cerrar (no tocar el fondo del menú principal)
+                    applyFondo(data.selectedFondo || value);
+                    const modalEl = document.getElementById('changeFondoModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                    modalInstance.hide();
+                } catch (err) {
+                    console.error(err);
+                    alert('Error al guardar el fondo');
+                }
+            });
+
+            // cuando se abre el modal, recargar la lista para tener datos frescos
+            const changeFondoModalEl = document.getElementById('changeFondoModal');
+            changeFondoModalEl.addEventListener('show.bs.modal', loadFondos);
         });
 
         function logout() {

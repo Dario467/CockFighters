@@ -103,6 +103,13 @@
             border: 3px solid #d4621f;
         }
 
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
         .product-name {
             color: #ff6b35;
             font-size: 1.8rem;
@@ -298,38 +305,83 @@
         <div class="products-grid">
             <!-- Producto 1 -->
             <div class="product-card">
-                <div class="product-image"></div>
-                <h3 class="product-name">FONDO1</h3>
+                <div class="product-image"><img src="/Assets/FONDO_nevado.jpg" alt="Fondo Nieve"></div>
+                <h3 class="product-name">FONDO : Nieve</h3>
                 <p class="product-description">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, voluptates. Sit doloremque nemo, ut porro incidunt quae. Dignissimos, ad inventore. Adipisci perspiciatis recusandae molestiae illum quasi harum, magnam consequuntur optio?
+                   Sumérgete en la calma del invierno con este fondo de paisaje nevado, donde montañas cubiertas de blanco y suaves copos en caída crean una atmósfera gélida, serena y visualmente impresionante para tu experiencia de juego.
                 </p>
-                <div class="product-price">$499.00</div>
+                <div class="product-price">$300.00</div>
                 <!-- CAMBIA price_XXX_FONDO1 por tu priceId real -->
-                <button class="btn-buy" onclick="openConfirmModal('Gallo Legendario', 499, 'price_1SWS362OiL7seYk7tkzM5nsb')">Comprar Ahora</button>
+                <button class="btn-buy" data-key="nevado" onclick="openConfirmModal('nevado','FONDO : Nieve', 300, 'price_1SWS362OiL7seYk7tkzM5nsb')">Comprar Ahora</button>
             </div>
 
             <!-- Producto 2 -->
             <div class="product-card">
-                <div class="product-image"></div>
-                <h3 class="product-name">FONDO2</h3>
+                <div class="product-image"><img src="/Assets/FONDO_kfc.jpg" alt="Fondo KFC"></div>
+                <h3 class="product-name">FONDO : KFC</h3>
                 <p class="product-description">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat nam, quas praesentium, omnis sint deleniti dignissimos temporibus beatae dolorem sunt quia. Esse velit deserunt ea aspernatur facere quis labore. Minus.    
+                    REGRESA A TUS ORIGENES , pele en el kfc mas cercano y demuestra que eres el mejor gallo de pelea.    
                 </p>
-                <div class="product-price">$299.00</div>
+                <div class="product-price">$300.00</div>
                 <!-- CAMBIA price_XXX_FONDO2 por tu priceId real -->
-                <button class="btn-buy" onclick="openConfirmModal('BBC', 299, 'price_1SWS2Z2OiL7seYk7O7gVlSql')">Comprar Ahora</button>
+                <button class="btn-buy" data-key="kfc" onclick="openConfirmModal('kfc','FONDO : KFC', 300, 'price_1SWS2Z2OiL7seYk7O7gVlSql')">Comprar Ahora</button>
             </div>
 
             <!-- Producto 3 -->
             <div class="product-card">
-                <div class="product-image"></div>
-                <h3 class="product-name">FONDO3</h3>
+                <div class="product-image"><img src="/Assets/FONDO_pradera.jpg" alt="Fondo Pradera"></div>
+                <h3 class="product-name">FONDO : Pradera</h3>
                 <p class="product-description">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta sapiente quaerat consectetur earum maiores pariatur quas aliquid, numquam assumenda blanditiis tempore mollitia qui sunt, quibusdam iusto, odit dolor excepturi quidem? 
+                    Fondo de pradera que transmite tranquilidad y libertad, con amplias extensiones de pasto verde, cielo despejado y una atmósfera natural perfecta para crear un entorno relajante y visualmente agradable dentro del videojueg 
                 </p>
-                <div class="product-price">$199.00</div>
+                <div class="product-price">$300.00</div>
                 <!-- CAMBIA price_XXX_FONDO3 por tu priceId real -->
-                <button class="btn-buy" onclick="openConfirmModal('El gallo de oro', 199, 'price_1SWS1J2OiL7seYk7zKoW2kQp')">Comprar Ahora</button>
+                <button class="btn-buy" data-key="pradera" onclick="openConfirmModal('pradera','FONDO : Pradera', 300, 'price_1SWS1J2OiL7seYk7zKoW2kQp')">Comprar Ahora</button>
+            </div>
+
+            <!-- Producto 4 -->
+            <div class="product-card">
+                <div class="product-image"><img src="/Assets/FONDO_bosque.jpg" alt="Fondo Bosque"></div>
+                <h3 class="product-name">FONDO : Bosque</h3>
+                <p class="product-description">
+Fondo de bosque que envuelve al jugador en un entorno natural y misterioso, con árboles frondosos, rayos de luz filtrándose entre las hojas y una atmósfera serena que aporta profundidad y realismo al escenario del videojuego                </p>
+                <div class="product-price">$300.00</div>
+                <!-- CAMBIA price_XXX_FONDO3 por tu priceId real -->
+                <button class="btn-buy" data-key="bosque" onclick="openConfirmModal('bosque','FONDO : Bosque', 300, 'price_1SXEnJ2OiL7seYk7jax9uH5N')">Comprar Ahora</button>
+            </div>
+
+            <!-- Producto 5 -->
+            <div class="product-card">
+                <div class="product-image"><img src="/Assets/FONDO_desierto.jpg" alt="Fondo Desierto"></div>
+                <h3 class="product-name">FONDO : Desierto</h3>
+                <p class="product-description">
+Fondo de desierto que evoca inmensidad y desafío, con dunas doradas, cielo despejado y un ambiente árido que aporta una sensación de aventura y exploración al escenario del videojuego.                </p>
+                <div class="product-price">$300.00</div>
+                <!-- CAMBIA price_XXX_FONDO3 por tu priceId real -->
+                <button class="btn-buy" data-key="desierto" onclick="openConfirmModal('desierto','FONDO : Desierto', 300, 'price_1SXEpm2OiL7seYk7pDZ7AJ4Y')">Comprar Ahora</button>
+            </div>
+
+            <!-- Producto 6 -->
+            <div class="product-card">
+                <div class="product-image"><img src="/Assets/FONDO_selva.jpg" alt="Fondo Selva"></div>
+                <h3 class="product-name">FONDO : Selva</h3>
+                <p class="product-description">
+Fondo de selva que sumerge al jugador en un entorno exuberante y vibrante, con vegetación densa, lianas, sombras profundas y una atmósfera salvaje que transmite vida, misterio y exploración dentro del videojuego.                </p>
+                <div class="product-price">$300.00</div>
+                <!-- CAMBIA price_XXX_FONDO3 por tu priceId real -->
+                <button class="btn-buy" data-key="selva" onclick="openConfirmModal('selva','FONDO : Selva', 300, 'price_1SXEqf2OiL7seYk7n0LSZEMl')">Comprar Ahora</button>
+            </div>
+
+            <!-- Producto 7 -->
+            <div class="product-card">
+                <div class="product-image"><img src="/Assets/FONDO_pradera.jpg" alt="Todos los fondos"></div>
+                <h3 class="product-name">TODOS LOS FONDOS</h3>
+                <p class="product-description">
+                    personaliza tu experiencia al maximo con todos los fondos premium disponibles en nuestra tienda. Desde paisajes nevados hasta selvas exuberantes, adquiere el paquete completo y transforma tu entorno de juego con solo un clic. ¡Haz que cada pelea sea única y emocionante con una variedad de fondos impresionantes! 
+                </p>
+                <div class="product-price">$1,200.00</div>
+                <!-- CAMBIA price_XXX_FONDO3 por tu priceId real -->
+                <button class="btn-buy" data-key="all" onclick="openConfirmModal('all','TODOS LOS FONDOS', 1200, 'price_1SXRJE2OiL7seYk7Y1yIWied')">Comprar Ahora</button>
             </div>
         </div>
     </div>
@@ -390,21 +442,60 @@
         // LLAVE PUBLICABLE DE STRIPE (MODO PRUEBA)
         const stripe = Stripe('pk_test_51SWRbd2OiL7seYk7lpBzmqRw16LBpOdtXfVDkWQmlGw9BkCGmBJlwpdB3i2yWaeF1M3JTHgnkfszhHaGxA4wzmfV0052BJFqz8');
 
-        let currentProduct = { name: '', price: 0, priceId: '' };
+        let currentProduct = { key: '', name: '', price: 0, priceId: '' };
         let confirmModalInstance, paymentModalInstance;
 
         document.addEventListener('DOMContentLoaded', function() {
             confirmModalInstance = new bootstrap.Modal(document.getElementById('confirmModal'));
             paymentModalInstance = new bootstrap.Modal(document.getElementById('paymentModal'));
+            
+            // Desactivar botones de compra según lo que el usuario ya haya comprado
+            (async function disablePurchasedButtons(){
+                const userId = localStorage.getItem('userId');
+                if (!userId) return; // no logueado
+
+                try {
+                    const userRes = await fetch(`/api/auth/user/${userId}`);
+                    if (!userRes.ok) return;
+                    const userData = await userRes.json();
+                    const fondos = userData.fondos || [];
+
+                    const buttons = document.querySelectorAll('.btn-buy[data-key]');
+                    const hasAll = fondos.includes('all');
+                    buttons.forEach(btn => {
+                        const key = btn.dataset.key;
+                        if (hasAll) {
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+                            btn.title = 'Ya compraste el paquete completo';
+                            return;
+                        }
+                        if (fondos.includes(key)) {
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+                            btn.title = 'Ya compraste este fondo';
+                            return;
+                        }
+                        // if user has at least one fondo, disable 'all' package
+                        if (fondos.length > 0 && key === 'all') {
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+                            btn.title = 'No puedes comprar el paquete si ya tienes fondos';
+                        }
+                    });
+                } catch (err) {
+                    // ignore errors, no blocking
+                }
+            })();
         });
 
         // Paso 1: usuario clic en "Comprar Ahora"
-        function openConfirmModal(productName, price, priceId) {
-            currentProduct = { name: productName, price: price, priceId: priceId };
-            
+        function openConfirmModal(productKey, productName, price, priceId) {
+            currentProduct = { key: productKey, name: productName, price: price, priceId: priceId };
+
             document.getElementById('confirmProductName').textContent = productName;
             document.getElementById('confirmProductPrice').textContent = `$${price.toFixed(2)}`;
-            
+
             confirmModalInstance.show();
         }
 
@@ -415,13 +506,18 @@
             paymentModalInstance.show();
 
             try {
+                const userId = localStorage.getItem('userId');
+
                 const response = await fetch('/create-checkout-session', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        priceId: currentProduct.priceId
+                        priceId: currentProduct.priceId,
+                        productKey: currentProduct.key,
+                        productName: currentProduct.name,
+                        userId: userId
                     })
                 });
 

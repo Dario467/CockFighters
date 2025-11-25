@@ -49,7 +49,7 @@ class UIManager{
             let img1 = document.createElement("img");
             img1.src = "https://cdn-icons-png.flaticon.com/512/3416/3416083.png";
             img1.className = "next";
-            img1.onclick = () => battle.nextFun();
+            img1.onclick = () => nextFun();
             this.#uiActionMenu.querySelector(".txt_box").appendChild(img1);
         }
     }
@@ -68,11 +68,11 @@ class UIManager{
                 <div class="card textback" style="width:258px; height:170px">
                     <h2 class="title_txt">Cambiar Gallo</h2>
                     <div class="container">
-                        <div class="gallo-card selected-gallo" style="width:90px; height:90px">
-                            <img src="/Assets/gallo_sprite_front1.png" width="90" height="90">
+                        <div class="gallo-card selected-gallo" style="width:80px; height:80px">
+                            <img src="/Assets/gallo_sprite_front1.png" width="80" height="80">
                         </div>
-                        <div class="gallo-card" style="width:90px; height:90px">
-                            <img src="/Assets/cyber_cock_back.png" width="90" height="90">
+                        <div class="gallo-card" style="width:80px; height:80px">
+                            <img src="/Assets/cyber_cock_back.png" width="80" height="80">
                         </div>
                     </div>
                 </div>

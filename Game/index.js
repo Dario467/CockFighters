@@ -1,14 +1,25 @@
+let player1 = null;
+let player2 = null;
+let ws = null;
+let battle = null;
+
 async function connectWS() {
     const res = await fetch("/ip");
     const data = await res.json();
 
     const serverIP = data.ip;
     console.log("Conectando a WS:", serverIP);
-    console.log(`\nUsa el link: http://${serverIP}:3000 para invitar a otro jugador.\n\n`);
-
-    window.ws = new WebSocket(`ws://${serverIP}:3000`);
+    if (serverIP) {
+        document.getElementById('shareLink').value = `http://${serverIP}:3000`;
+    }
+    ws = new WebSocket(`ws://${serverIP}:3000`);
 
     ws.onopen = () => console.log("WS conectado");
+    ws.onclose = () => {
+        console.log("Te has desconectado del servidor");
+        alert("Se perdió la conexión con el servidor");
+        window.location.href = "menuP.html";
+    };
     ws.onerror = e => console.error("WS error", e);
     ws.onmessage = e => {
         const data = JSON.parse(e.data);
@@ -16,28 +27,68 @@ async function connectWS() {
         if (data.type === "player_id") {
           console.log("Soy el jugador:", data.id);
           if (data.id === 1) {
+            document.getElementById('shareModal').classList.remove('hidden');
+            player1 = crearPlayer1();
+            player1.player_awake();
             document.getElementById("player1Area").style.display = "";
             document.getElementById("player2Area").style.display = "none";
           }
           else if (data.id === 2) {
+            player2 = crearPlayer2();
+            player2.player_awake();
             document.getElementById("player1Area").style.display = "none";
             document.getElementById("player2Area").style.display = "";
           }
           return;
         }
 
-        if (data.type === "move") {
-            battle.playerChooseMove(data.player, data.move);
+        if (data.type === "opponent_joined") {
+          console.log("El enemigo es el jugador:", data.opponent);
+          if (data.opponent === 1) {  
+            player1 = crearPlayer1(); 
+            player1.player_awake(); 
+          } else {  
+            player2 = crearPlayer2();
+            player2.player_awake();  
+          }
+          if (player1 && player2) {
+            console.log("Ambos jugadores conectados. Iniciando batalla.");
+            document.getElementById('shareModal').classList.add('hidden');            
+            battle = new Battle(player1, player2);
+            gameLoop();
+          }
+          return;
         }
 
+        if (data.type === "move") {
+          console.log("Movimiento recibido del jugador", data.player, ":", data.move);
+          battle.playerChooseMove(data.player, data.move);
+        }
+
+        if(data.type === "nextText") {
+          console.log("nextText recibido");
+          battle.nextTxt();
+        }
+
+        if (data.type === "opponent_disconnected") {
+          console.log(`El jugador ${data.playerId} se ha desconectado`);
+          alert("Tu oponente se ha desconectado. Regresando al menú...");
+          window.location.href = "menuP.html";
+          ws.send(JSON.stringify({
+              type: "you_disconnect"
+          }));
+          return;
+        }
+        if(data.type === "you_disconnect") {
+            alert("Te Has sido desconectado.");
+            window.location.href = "menuP.html";
+        }
         if(data.type === "server_full") {
             alert("El servidor del juego está lleno. Intenta más tarde.");
             window.location.href = "menuP.html";
         }
     };
 }
-
-connectWS();
 
 const canvas = document.getElementById("canvas1");
 const c = canvas.getContext("2d");
@@ -54,54 +105,33 @@ let in_animation = false;
 c.fillRect(0,0,canvas.width, canvas.height);
 c2.fillRect(0,0,canvas2.width, canvas2.height);
 
-const player1 = new Player({
-    x:75,
-    y:0+canvas.height-250
-},
-{
-    x:canvas.width-480,
-    y:60
-},
-{
-    x:370,
-    y:250
-},
-[
-  new Cock("CYBER COCK",25,12,4,5,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"]),
-  new Cock("MAGALLO",30,10,4,5,["/Assets/magallo_back.png","/Assets/magallo_front.png"],["recharge","shield","attack","heal"])
-],
-1);
-
-const player2 = new Player({
-    x:canvas.width-480,
-    y:60
-},
-{
-    x:75,
-    y:0+canvas.height-250
-},
-{
-    x:370,
-    y:250
-},
-[
-  new Cock("CUBETA KFC",35,8,4,5,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"]),
-  new Cock("BIG BLACK COCK",10,20,4,5,["/Assets/big_black_cock_back.png","/Assets/big_black_cock_front1.png"],["recharge","shield","attack","heal"])
-],
-2);
-
-const battle = new Battle(player1,player2);
+connectWS();
 
 function chooseMove(playerId, moveIndex) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        console.error("WebSocket no está conectado");
+        return;
+    }
+    ws.send(JSON.stringify({
+          type: "move",
+          player: playerId,
+          move: moveIndex
+    }));
+    console.log("Movimiento elegido:", moveIndex);
     battle.playerChooseMove(playerId, moveIndex);
 };
+
+function nextFun(){
+  ws.send(JSON.stringify({
+    type: "nextText"
+  }));
+  battle.nextTxt();
+}
 
 function gameLoop() {
   if (!awake){
     awake = true;
     console.log("Game Started");
-    player1.player_awake();
-    player2.player_awake();
     animationMove(player2, 945, 1,400);
     animationMove(player1, -325, 1,-400);
   }
@@ -118,7 +148,6 @@ function gameLoop() {
   player2.draw(c2,0,false);
   window.requestAnimationFrame(gameLoop);
 }
-gameLoop();
 
 function animationMove(player, initialPos, duration, speed) {
   return new Promise(resolve => {
@@ -150,4 +179,61 @@ async function run() {
   await animationMove(player2, 800, 0.5);
   await animationMove(player2, 700, 0.5);
   console.log("Listo!");
+}
+
+function copyLink() {
+    const linkInput = document.getElementById('shareLink');
+    linkInput.select();
+    linkInput.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    
+    const copyText = document.getElementById('copyText');
+    copyText.textContent = '¡Copiado!';
+    setTimeout(() => {
+        copyText.textContent = 'Copiar';
+    }, 2000);
+}
+
+function returnToMenu() {
+    window.location.href = 'menuP.html';
+}
+
+function crearPlayer1(){
+  return new Player({
+    x:75,
+    y:0+canvas.height-250
+  },
+  {
+    x:canvas.width-480,
+    y:60
+  },
+  {
+    x:370,
+    y:250
+  },
+  [
+  new Cock("CYBER COCK",25,12,4,5,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"]),
+  new Cock("MAGALLO",30,10,4,5,["/Assets/magallo_back.png","/Assets/magallo_front.png"],["recharge","shield","attack","heal"])
+  ],
+  1);
+}
+
+function crearPlayer2(){
+  return new Player({
+      x:canvas.width-480,
+      y:60
+  },
+  {
+      x:75,
+      y:0+canvas.height-250
+  },
+  {
+      x:370,
+      y:250
+  },
+  [
+    new Cock("CUBETA KFC",35,8,4,5,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"]),
+    new Cock("BIG BLACK COCK",10,20,4,5,["/Assets/big_black_cock_back.png","/Assets/big_black_cock_front1.png"],["recharge","shield","attack","heal"])
+  ],
+  2);
 }

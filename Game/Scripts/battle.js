@@ -107,8 +107,18 @@ class Battle {
         this.p2.deactiveShield();
         
         if(!this.p1.selectedCock.alive && !this.p2.selectedCock.alive){
-            console.log("los gallos de los dos murieron");
-            return;
+            let p1Change = this.p1.changeToAliveCock();
+            let p2Change = this.p2.changeToAliveCock()
+            if(!p1Change && !p2Change){
+                console.log("empate");
+                return;
+            }else if(!p1Change){
+                console.log("jugador 1 perdio");
+                return;
+            }else if(!p2Change){
+                console.log("jugador 2 perdio");
+                return;
+            }
         }
         else if(!this.p1.selectedCock.alive){
             if(!this.p1.changeToAliveCock()){

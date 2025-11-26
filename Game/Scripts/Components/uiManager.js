@@ -54,7 +54,7 @@ class UIManager{
         }
     }
 
-    textBoxMenuDisplay(player, actions){
+    textBoxMenuDisplay(player, actions, gallos){
          this.#uiActionMenu.innerHTML = `
          <div class="card_container">
                 <div class="card textback" style="width:764px; height:170px">
@@ -66,21 +66,15 @@ class UIManager{
             </div>
             <div class="card_container">
                 <div class="card textback" style="width:258px; height:170px">
-                    <h2 class="title_txt">Cambiar Gallo</h2>
-                    <div class="container">
-                        <div class="gallo-card selected-gallo" style="width:80px; height:80px">
-                            <img src="/Assets/gallo_sprite_front1.png" width="80" height="80">
-                        </div>
-                        <div class="gallo-card" style="width:80px; height:80px">
-                            <img src="/Assets/cyber_cock_back.png" width="80" height="80">
-                        </div>
+                    <h2 class="title_txt">Tus Gallo</h2>
+                    <div class="container containerCock">
+                    
                     </div>
                 </div>
             </div>
         </div>
         `;
         let button_cont = this.#uiActionMenu.querySelector(".containerButtons");
-        let i = 0;
         for(let i = 0; i < actions.length; i++){
             let action = actions[i];
             let boton = document.createElement("button");
@@ -88,6 +82,22 @@ class UIManager{
             boton.onclick = () => chooseMove(player, i);
             boton.innerText = actionDefinitions[action].nombre;
             button_cont.appendChild(boton);
+        }
+
+        let cock_cont = this.#uiActionMenu.querySelector(".containerCock");
+        for(let i = 0; i < gallos.length; i++){
+            let gallo = gallos[i];
+            let galloSprite = gallo.sprites["spriteBack"];
+
+            const galloCardHTML = `
+            <div class="gallo-card selected-gallo" style="width:80px; height:80px">
+                <img src="${galloSprite}" width="75" height="75">
+            </div>
+            `;
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = galloCardHTML;
+            const galloCard = tempDiv.firstElementChild;
+            cock_cont.appendChild(galloCard);
         }
     }
 

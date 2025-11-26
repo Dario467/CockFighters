@@ -34,7 +34,7 @@ class Player {
         this.#UIManager.updateTopUI(this.#selectedCock.nombre,this.#selectedCock.poder);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
         this.#UIManager.updateShieldUI(this.#selectedCock.shields);
-        this.#UIManager.textBoxMenuDisplay(this.#player,this.#selectedCock.acciones);
+        this.#UIManager.textBoxMenuDisplay(this.#player,this.#selectedCock.acciones,this.cocks);
     }
 
     draw(ctx, sprite_id, view1) {

@@ -125,8 +125,8 @@ class Battle {
         
         this.p1.rechargeUI();
         this.p2.rechargeUI();
-        this.p1.UIManager.textBoxMenuDisplay(this.p1.player, this.p1.selectedCock.acciones);
-        this.p2.UIManager.textBoxMenuDisplay(this.p2.player, this.p2.selectedCock.acciones);
+        this.p1.UIManager.textBoxMenuDisplay(this.p1.player, this.p1.selectedCock.acciones, this.p1.cocks);
+        this.p2.UIManager.textBoxMenuDisplay(this.p2.player, this.p2.selectedCock.acciones, this.p2.cocks);
         // ¿Victoria?
         //if (this.p1.cock.vida <= 0) {
             //this.ui.matchEnd(2);

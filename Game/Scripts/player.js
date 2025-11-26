@@ -115,11 +115,11 @@ class Player {
     }
 
     rechargeUI(){
+        this.#UIManager.updateTopUI(this.#selectedCock.nombre,this.#selectedCock.poder);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
         this.#UIManager.updateShieldUI(this.#selectedCock.shields);
         this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
         this.#UIManager.updateBulletsUI(this.#selectedCock.bullets,this.#selectedCock.bulletsMax);
         this.#UIManager.updateShieldUI(this.#selectedCock.shields);
-        this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);    
     }
 }

@@ -28,7 +28,7 @@ class Player {
     }
 
     player_awake() {
-        this.#spriteRender = new SpriteRender(this.#position, this.scale,this.#selectedCock.sprites[0]);
+        this.#spriteRender = new SpriteRender(this.#position, this.scale,this.#selectedCock.sprites["spriteBack"]);
         this.#UIManager = new UIManager(this.#player);
         this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
         this.#UIManager.updateTopUI(this.#selectedCock.nombre,this.#selectedCock.poder);

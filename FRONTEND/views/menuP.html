@@ -712,7 +712,7 @@
                     fondoPreview.style.backgroundSize = '';
                     fondoPreview.style.backgroundRepeat = '';
                     fondoPreview.style.backgroundPosition = '';
-                    window.selectedFondoRoute = null;  // ← Guarda null para default
+                    localStorage.selectedFondoRoute = null;  // ← Guarda null para default
                     console.log('Fondo seleccionado: Default (null)');
                 } else {
                     const url = assetForKey(key);
@@ -722,12 +722,12 @@
                         fondoPreview.style.backgroundSize = 'cover';
                         fondoPreview.style.backgroundRepeat = 'no-repeat';
                         fondoPreview.style.backgroundPosition = 'center';
-                        window.selectedFondoRoute = url;  // ← Guarda la ruta en la variable global
+                        localStorage.selectedFondoRoute = url;  // ← Guarda la ruta en la variable global
                         console.log('Fondo seleccionado:', url);
                     } else {
                         fondoPreview.textContent = key;
                         fondoPreview.style.backgroundImage = '';
-                        window.selectedFondoRoute = null;
+                        localStorage.selectedFondoRoute = null;
                         console.log('Fondo no encontrado:', key);
                     }
                 }

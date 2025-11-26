@@ -15,6 +15,7 @@ module.exports = (app, server, WebSocket, os, PORT) => {
     }
     
     const players = { 1: null, 2: null };
+    const teams = { 1: null, 2: null };
     
     const localIP = getLocalIP();
     console.log("IP LAN detectada:", localIP);
@@ -31,6 +32,8 @@ module.exports = (app, server, WebSocket, os, PORT) => {
 
     wss.on("connection", async (ws) => { 
         let playerId = null;
+        let playerTeam = null;
+    
         if (!players[1]) {
             playerId = 1;
             players[1] = ws;
@@ -48,6 +51,7 @@ module.exports = (app, server, WebSocket, os, PORT) => {
             const data = JSON.parse(messageStr);
             if (data.type === "set_team") {
                 playerTeam = data.team;
+                teams[playerId] = playerTeam; 
                 
                 ws.send(JSON.stringify({ 
                     type: "player_id", 
@@ -55,14 +59,16 @@ module.exports = (app, server, WebSocket, os, PORT) => {
                     team: playerTeam
                 }));
 
-                if(players[1] && players[2]) {
+                if (players[1] && players[2] && teams[1] && teams[2]) {
                     players[1].send(JSON.stringify({
                         type: "opponent_joined",
-                        opponent: 2
+                        opponent: 2,
+                        opponentTeam: teams[2]
                     }));
                     players[2].send(JSON.stringify({
                         type: "opponent_joined",
-                        opponent: 1
+                        opponent: 1,
+                        opponentTeam: teams[1]
                     }));
                 }
                 return;
@@ -86,6 +92,7 @@ module.exports = (app, server, WebSocket, os, PORT) => {
             }
             if (players[1] === ws) players[1] = null;
             if (players[2] === ws) players[2] = null;
+            teams[playerId] = null;
         });
     });
 };

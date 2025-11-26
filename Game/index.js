@@ -35,8 +35,12 @@ async function connectWS() {
       }
       console.log("Gallos guardados:", savedGallos);
       let miEquipo = [];
-      miEquipo.push(misGallosGlobal.find(g => g._id === savedGallos[0]));
-      miEquipo.push(misGallosGlobal.find(g => g._id === savedGallos[1]));
+      let galloBase = misGallosGlobal.find(g => g._id === savedGallos[0]);
+      let gallo = new Cock(galloBase.nombre,galloBase.vida,galloBase.poder,galloBase.bullet,galloBase.cura,galloBase.sprites,galloBase.action);
+      miEquipo.push(gallo);
+      galloBase = misGallosGlobal.find(g => g._id === savedGallos[1]);
+      gallo = new Cock(galloBase.nombre,galloBase.vida,galloBase.poder,galloBase.bullet,galloBase.cura,galloBase.sprites,galloBase.action);
+      miEquipo.push(gallo);
       console.log("Mi equipo final:", miEquipo);
 
       ws.send(JSON.stringify({
@@ -56,15 +60,16 @@ async function connectWS() {
         if (data.type === "player_id") {
           console.log("Soy el jugador:", data.id);
           console.log("Mi equipo es:", data.team[0].nombre);
+          console.log(localStorage.selectedFondoRoute);
           if (data.id === 1) {
             document.getElementById('shareModal').classList.remove('hidden');
-            player1 = crearPlayer1();
+            player1 = crearPlayer1(data.team,localStorage.selectedFondoRoute);
             player1.player_awake();
             document.getElementById("player1Area").style.display = "";
             document.getElementById("player2Area").style.display = "none";
           }
           else if (data.id === 2) {
-            player2 = crearPlayer2();
+            player2 = crearPlayer2(data.team,localStorage.selectedFondoRoute);
             player2.player_awake();
             document.getElementById("player1Area").style.display = "none";
             document.getElementById("player2Area").style.display = "";
@@ -74,11 +79,12 @@ async function connectWS() {
 
         if (data.type === "opponent_joined") {
           console.log("El enemigo es el jugador:", data.opponent);
+          console.log(data);
           if (data.opponent === 1) {  
-            player1 = crearPlayer1(); 
+            player1 = crearPlayer1(data.opponentTeam); 
             player1.player_awake(); 
           } else {  
-            player2 = crearPlayer2();
+            player2 = crearPlayer2(data.opponentTeam);
             player2.player_awake();  
           }
           if (player1 && player2) {
@@ -171,11 +177,11 @@ function gameLoop() {
   c2.fillStyle = "lightgray";
   c2.fillRect(0,0,canvas2.width, canvas2.height);
   
-  player1.draw(c,0,true);
-  player2.draw(c,1,true);
+  player1.draw(c,"spriteBack",true);
+  player2.draw(c,"spriteFront",true);
 
-  player1.draw(c2,1,false);
-  player2.draw(c2,0,false);
+  player1.draw(c2,"spriteFront",false);
+  player2.draw(c2,"spriteBack",false);
   window.requestAnimationFrame(gameLoop);
 }
 
@@ -228,7 +234,7 @@ function returnToMenu() {
     window.location.href = 'menuP.html';
 }
 
-function crearPlayer1(){
+function crearPlayer1(cocks,background){
   return new Player({
     x:75,
     y:0+canvas.height-250
@@ -241,15 +247,12 @@ function crearPlayer1(){
     x:370,
     y:250
   },
-  [
-  new Cock("CYBER COCK",25,12,4,5,["/Assets/cyber_cock_back.png","/Assets/cyber_cock_front.png"],["recharge","shield","attack","heal"]),
-  new Cock("MAGALLO",30,10,4,5,["/Assets/magallo_back.png","/Assets/magallo_front.png"],["recharge","shield","attack","heal"])
-  ],
+  cocks,
   1,
   "/Assets/FONDO_bosque.jpg");
 }
 
-function crearPlayer2(){
+function crearPlayer2(cocks,background){
   return new Player({
       x:canvas.width-480,
       y:60
@@ -262,10 +265,7 @@ function crearPlayer2(){
       x:370,
       y:250
   },
-  [
-    new Cock("CUBETA KFC",35,8,4,5,["/Assets/bucket_back.png","/Assets/bucket_front.png"],["recharge","shield","attack","heal"]),
-    new Cock("BIG BLACK COCK",10,20,4,5,["/Assets/big_black_cock_back.png","/Assets/big_black_cock_front1.png"],["recharge","shield","attack","heal"])
-  ],
+  cocks,
   2,
   "/Assets/FONDO_bosque.jpg");
 }

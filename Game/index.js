@@ -1,3 +1,55 @@
+//gestion de la puntuacion de los usuarios
+async function addPointsToCurrentUser(delta) {
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+        console.warn('No hay usuario en sesión');
+        return false;
+    }
+
+    if (typeof delta !== 'number') {
+        console.warn('delta debe ser un número');
+        return false;
+    }
+
+    try {
+        // Obtener puntos actuales del usuario
+        const userRes = await fetch(`/api/auth/user/${userId}`);
+        if (!userRes.ok) {
+            console.error('Error obteniendo usuario actual');
+            return false;
+        }
+        const user = await userRes.json();
+        const currentScore = user.score || 0;
+
+        // Calcular nuevo score (
+        const newScore = Math.max(0, currentScore + delta);
+
+        // Enviar al backend
+        const res = await fetch(`/api/auth/user/${userId}/score`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ score: newScore })
+        });
+
+        if (!res.ok) {
+            console.error('Error guardando puntuación:', await res.text());
+            return false;
+        }
+
+        const updatedUser = await res.json();
+        console.log(`Puntos actualizados: ${currentScore} + ${delta} = ${updatedUser.score}`);
+
+        return true;
+    } catch (err) {
+        console.error('Error en addPointsToCurrentUser:', err);
+        return false;
+    }
+}
+
+// Exponer globalmente para uso en consola
+window.addPointsToCurrentUser = addPointsToCurrentUser;
+
 let player1 = null;
 let player2 = null;
 let ws = null;
@@ -47,7 +99,7 @@ async function connectWS() {
         type: "set_team",
         team: miEquipo
       }));
-    } 
+    }
     ws.onclose = () => {
         console.log("Te has desconectado del servidor");
         alert("Se perdió la conexión con el servidor");
@@ -80,16 +132,16 @@ async function connectWS() {
         if (data.type === "opponent_joined") {
           console.log("El enemigo es el jugador:", data.opponent);
           console.log(data);
-          if (data.opponent === 1) {  
-            player1 = crearPlayer1(data.opponentTeam); 
-            player1.player_awake(); 
-          } else {  
+          if (data.opponent === 1) {
+            player1 = crearPlayer1(data.opponentTeam);
+            player1.player_awake();
+          } else {
             player2 = crearPlayer2(data.opponentTeam);
-            player2.player_awake();  
+            player2.player_awake();
           }
           if (player1 && player2) {
             console.log("Ambos jugadores conectados. Iniciando batalla.");
-            document.getElementById('shareModal').classList.add('hidden');            
+            document.getElementById('shareModal').classList.add('hidden');
             battle = new Battle(player1, player2);
             gameLoop();
           }
@@ -173,10 +225,10 @@ function gameLoop() {
   }
   c.fillStyle = "lightgray";
   c.fillRect(0,0,canvas.width, canvas.height);
-  
+
   c2.fillStyle = "lightgray";
   c2.fillRect(0,0,canvas2.width, canvas2.height);
-  
+
   player1.draw(c,"spriteBack",true);
   player2.draw(c,"spriteFront",true);
 
@@ -222,7 +274,7 @@ function copyLink() {
     linkInput.select();
     linkInput.setSelectionRange(0, 99999);
     document.execCommand('copy');
-    
+
     const copyText = document.getElementById('copyText');
     copyText.textContent = '¡Copiado!';
     setTimeout(() => {

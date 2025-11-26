@@ -869,6 +869,59 @@
     </script>
 
     <script>
+        // Gestión de puntuación del usuario
+        async function addPointsToCurrentUser(delta) {
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                console.warn('No hay usuario en sesión');
+                return false;
+            }
+
+            if (typeof delta !== 'number') {
+                console.warn('delta debe ser un número');
+                return false;
+            }
+
+            try {
+                // Obtener puntos actuales del usuario
+                const userRes = await fetch(`/api/auth/user/${userId}`);
+                if (!userRes.ok) {
+                    console.error('Error obteniendo usuario actual');
+                    return false;
+                }
+                const user = await userRes.json();
+                const currentScore = user.score || 0;
+
+                // Calcular nuevo score
+                const newScore = Math.max(0, currentScore + delta);
+
+                // Enviar al backend
+                const res = await fetch(`/api/auth/user/${userId}/score`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ score: newScore })
+                });
+
+                if (!res.ok) {
+                    console.error('Error guardando puntuación:', await res.text());
+                    return false;
+                }
+
+                const updatedUser = await res.json();
+                console.log(`Puntos actualizados: ${currentScore} + ${delta} = ${updatedUser.score}`);
+
+                // Disparar evento para recargar ranking
+                const event = new Event('pointsUpdated');
+                window.dispatchEvent(event);
+
+                return true;
+            } catch (err) {
+                console.error('Error en addPointsToCurrentUser:', err);
+                return false;
+            }
+        }
+
         // Cargar usuario y ranking
         const rankingModule = (function () {
             const userId = localStorage.getItem('userId');
@@ -922,8 +975,8 @@
                     console.warn('No hay usuario en sesión');
                     return false;
                 }
-                if (typeof points !== 'number' || points < 0) {
-                    console.warn('points debe ser un número >= 0');
+                if (typeof points !== 'number') {
+                    console.warn('points debe ser un número');
                     return false;
                 }
                 try {

@@ -463,7 +463,7 @@
         </div>
 
         <div class="play-section">
-            <a type="button" class="btn btn-danger" href="game.html">jugar</a>
+            <a type="button" id="playBtn" class="btn btn-danger" href="game.html">jugar</a>
         </div>
 
         <div class="ranking-section">
@@ -614,6 +614,7 @@
                 });
 
                 // Mostrar los gallos guardados en las imágenes principales
+                const playBtn = document.getElementById('playBtn');
                 if (savedGallos.length >= 2) {
                     // Buscar los objetos de gallos por sus IDs
                     const primary = misGallosGlobal.find(g => g._id === savedGallos[0]);
@@ -627,13 +628,20 @@
                         const secondaryPath = (secondary.sprites && (secondary.sprites.spriteFront || secondary.sprites.spriteBack)) || mainGalloImgs[1].src;
                         mainGalloImgs[1].src = secondaryPath;
                     }
+                    // Habilitar botón jugar si hay equipo completo
+                    playBtn.style.pointerEvents = 'auto';
+                    playBtn.style.opacity = '1';
+                    playBtn.disabled = false;
                 } else {
-                    // Si no hay equipo guardado, mostrar el sprite del primer gallo en ambas imágenes
-                    const firstSprite = (misGallosGlobal[0] && misGallosGlobal[0].sprites && (misGallosGlobal[0].sprites.spriteFront || misGallosGlobal[0].sprites.spriteBack));
-                    if (firstSprite) {
-                        if (mainGalloImgs[0]) mainGalloImgs[0].src = firstSprite;
-                        if (mainGalloImgs[1]) mainGalloImgs[1].src = firstSprite;
-                    }
+                    // Si no hay equipo guardado, mostrar el emoji (src original)
+                    const defaultEmojiSrc = 'https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png';
+                    if (mainGalloImgs[0]) mainGalloImgs[0].src = defaultEmojiSrc;
+                    if (mainGalloImgs[1]) mainGalloImgs[1].src = defaultEmojiSrc;
+                    
+                    // Deshabilitar botón jugar si no hay equipo
+                    playBtn.style.pointerEvents = 'none';
+                    playBtn.style.opacity = '0.5';
+                    playBtn.disabled = true;
                 }
 
                 // Guardar selección: aplicar solo si hay exactamente 2 seleccionados
@@ -650,6 +658,12 @@
 
                     if (mainGalloImgs[0]) mainGalloImgs[0].src = pPath;
                     if (mainGalloImgs[1]) mainGalloImgs[1].src = sPath;
+
+                    // Habilitar botón jugar cuando se guarda un equipo válido
+                    const playBtn = document.getElementById('playBtn');
+                    playBtn.style.pointerEvents = 'auto';
+                    playBtn.style.opacity = '1';
+                    playBtn.disabled = false;
 
                     // Guardar en la BD si hay userId
                     if (userId) {

@@ -201,4 +201,22 @@ router.get('/ranking', async (req, res) => {
     }
 });
 
+// incrementar puntuación del usuario (delta opcional, por defecto 1)
+router.post('/user/:userId/score/inc', async (req, res) => {
+    const { userId } = req.params;
+    let { delta } = req.body;
+    if (delta === undefined || delta === null) delta = 1;
+    const parsed = parseInt(delta, 10);
+    if (isNaN(parsed)) return res.status(400).json({ message: 'delta debe ser un entero' });
+
+    try {
+        const user = await User.findByIdAndUpdate(userId, { $inc: { score: parsed } }, { new: true }).select('username score');
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.json(user);
+    } catch (error) {
+        console.error('ERROR EN POST USER SCORE INC:', error);
+        return res.status(500).json({ message: 'Error al incrementar puntuación' });
+    }
+});
+
 module.exports = router;

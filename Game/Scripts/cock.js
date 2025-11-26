@@ -10,12 +10,14 @@ class Cock {
         this.sprites = sprites;
         this.acciones = acciones;
         this.curacion = cura;
+        this.alive = true;
     }
 
     damage(amount) {
         this.vida -= amount;
         if (this.vida < 0) {
             this.vida = 0;
+            this.alive = false;
         }
     }
 

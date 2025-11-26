@@ -6,6 +6,20 @@ class Battle {
         this.msgStack = [];
     }
 
+    playerChangeCock(playerId,cockIndex){
+        let player = null;
+        if(playerId === 1){
+            player = this.p1
+        }else{
+            player = this.p2
+        }
+        player.chooseAction(-1);
+
+        if (this.p1.selectAction && this.p2.selectAction) {
+            this.resolveTurn();
+        }
+    }
+
     playerChooseMove(playerId, moveIndex) {
         let player = null;
         if(playerId === 1){
@@ -40,6 +54,7 @@ class Battle {
         if(this.p2.selectAction.tipo === "prioritario"){
             this.executeMove(this.p2, this.p1);
         }else{
+            console.log("player 1 ", this.p1.selectAction);
             this.executeMove(this.p1, this.p2);
         }
         //if (this.p2.cock.vida > 0) { 
@@ -85,17 +100,33 @@ class Battle {
     }
 
     endTurn() {
-        this.p1.rechargeUI();
-        this.p2.rechargeUI();
-        console.log("hola");
         // limpiar
         this.p1.removeAction();
         this.p2.removeAction();
         this.p1.deactiveShield();
         this.p2.deactiveShield();
+        
+        if(!this.p1.selectedCock.alive && !this.p2.selectedCock.alive){
+            console.log("los gallos de los dos murieron");
+            return;
+        }
+        else if(!this.p1.selectedCock.alive){
+            if(!this.p1.changeToAliveCock()){
+                console.log("jugador 1 perdio");
+                return;
+            }
+        }
+        else{
+            if(!this.p2.changeToAliveCock()){
+                console.log("jugador 2 perdio");
+                return;
+            }
+        }
+        
+        this.p1.rechargeUI();
+        this.p2.rechargeUI();
         this.p1.UIManager.textBoxMenuDisplay(this.p1.player, this.p1.selectedCock.acciones);
         this.p2.UIManager.textBoxMenuDisplay(this.p2.player, this.p2.selectedCock.acciones);
-
         // ¿Victoria?
         //if (this.p1.cock.vida <= 0) {
             //this.ui.matchEnd(2);

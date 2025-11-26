@@ -84,6 +84,10 @@ class Player {
     }
 
     chooseAction(moveIndex){
+        if(moveIndex === -1){
+            this.#selectAction = "cambiar";
+            return;
+        }
         this.#selectAction = actionDefinitions[this.#selectedCock.acciones[moveIndex]];
     }
 
@@ -97,6 +101,16 @@ class Player {
 
     deactiveShield(){
         this.#haveShield = false;
+    }
+
+    changeToAliveCock(){
+        for(const cock of this.cocks){
+            if(cock.alive){
+                this.#selectedCock = cock;
+                return true;
+            }
+        }
+        return false;
     }
 
     rechargeUI(){

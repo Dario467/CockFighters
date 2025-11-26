@@ -234,7 +234,16 @@ function returnToMenu() {
     window.location.href = 'menuP.html';
 }
 
-function crearPlayer1(cocks,background){
+function crearPlayer1(cocksData,background){
+  const cocks = cocksData.map(cockData => new Cock(
+        cockData.nombre,
+        cockData.vidaMax || cockData.vida,
+        cockData.poder,
+        cockData.bulletsMax || cockData.bullet,
+        cockData.curacion,
+        cockData.sprites,
+        cockData.acciones || cockData.action
+  ));
   return new Player({
     x:75,
     y:0+canvas.height-250
@@ -252,7 +261,16 @@ function crearPlayer1(cocks,background){
   "/Assets/FONDO_bosque.jpg");
 }
 
-function crearPlayer2(cocks,background){
+function crearPlayer2(cocksData,background){
+  const cocks = cocksData.map(cockData => new Cock(
+        cockData.nombre,
+        cockData.vidaMax || cockData.vida,
+        cockData.poder,
+        cockData.bulletsMax || cockData.bullet,
+        cockData.curacion,
+        cockData.sprites,
+        cockData.acciones || cockData.action
+  ));
   return new Player({
       x:canvas.width-480,
       y:60

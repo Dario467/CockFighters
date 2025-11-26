@@ -54,6 +54,7 @@ let player1 = null;
 let player2 = null;
 let ws = null;
 let battle = null;
+const backgroundImage = new Image();
 
 async function connectWS() {
     const res = await fetch("/ip");
@@ -236,18 +237,30 @@ function nextFun(){
   battle.nextTxt();
 }
 
+
 function gameLoop() {
   if (!awake){
     awake = true;
     console.log("Game Started");
     animationMove(player2, 945, 1,400);
     animationMove(player1, -325, 1,-400);
+    backgroundImage.src = localStorage.selectedFondoRoute;
+    console.log(backgroundImage.src);
   }
-  c.fillStyle = "lightgray";
-  c.fillRect(0,0,canvas.width, canvas.height);
-
-  c2.fillStyle = "lightgray";
-  c2.fillRect(0,0,canvas2.width, canvas2.height);
+  if(!backgroundImage.src || backgroundImage.naturalWidth === 0){
+    backgroundImage.src = "";
+    c.fillStyle = "lightgray";
+    c.fillRect(0,0,canvas.width, canvas.height);
+    c2.fillStyle = "lightgray";
+    c2.fillRect(0,0,canvas2.width, canvas2.height);
+  }else{
+    c.filter = "brightness(70%) blur(1px) grayscale(30%)";
+    c.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+    c.filter = "none";
+    c2.filter = "brightness(70%) blur(1px) grayscale(30%)";
+    c2.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+    c2.filter = "none";
+  }
 
   player1.draw(c,"spriteBack",true);
   player2.draw(c,"spriteFront",true);

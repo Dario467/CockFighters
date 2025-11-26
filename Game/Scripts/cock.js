@@ -15,7 +15,7 @@ class Cock {
 
     damage(amount) {
         this.vida -= amount;
-        if (this.vida < 0) {
+        if (this.vida <= 0) {
             this.vida = 0;
             this.alive = false;
         }

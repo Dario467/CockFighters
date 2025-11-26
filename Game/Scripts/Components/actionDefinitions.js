@@ -16,7 +16,7 @@ const actionDefinitions = {
         execute(attacker, defender){
             attacker.selectedCock.useShield(2);
             attacker.activeShield();
-            return `${attacker.selectedCock.nombre} se portegió con un escudo.`;
+            return `${attacker.selectedCock.nombre} se protegió con un escudo.`;
         }
     },{
         canUse(attacker){

@@ -94,7 +94,7 @@ class Battle {
         this.p2.removeAction();
         this.p1.deactiveShield();
         this.p2.deactiveShield();
-        
+
         if(!this.p1.selectedCock.alive && !this.p2.selectedCock.alive){
             let p1Change = this.p1.changeToAliveCock();
             let p2Change = this.p2.changeToAliveCock();
@@ -122,7 +122,6 @@ class Battle {
         }
         else if(!this.p2.selectedCock.alive){
             if(!this.p2.changeToAliveCock()){
-                // P2 no tiene más gallos vivos = P1 gana
                 console.log("jugador 1 ganó");
                 sendEndInfo(false, 1, 2);
                 return;

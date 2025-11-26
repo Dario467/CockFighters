@@ -382,7 +382,7 @@
                 <div class="modal-footer" style="display: flex; flex-direction: column; gap: 15px;">
                     <div style="display: flex; justify-content: space-between; width: 100%; gap: 10px;">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="flex: 1;">Cancelar</button>
-                        <button type="button" class="btn btn-primary" style="flex: 1;">Guardar Cambios</button>
+                        <button id="saveUserBtn" type="button" class="btn btn-primary" style="flex: 1;">Guardar Cambios</button>
                     </div>
                     <button type="button" class="btn btn-logout" onclick="logout()" style="width: 100%;">Cerrar Sesión</button>
                 </div>
@@ -1007,14 +1007,89 @@
                 await loadRanking();
             });
 
-            // exponer función globalmente
+            // exponer funciones necesarias
             return {
-                addPointsToCurrentUser
+                addPointsToCurrentUser,
+                loadRanking,
+                loadUser
             };
         })();
 
         // hacer accesible globalmente
         window.addPointsToCurrentUser = rankingModule.addPointsToCurrentUser;
+    </script>
+
+    <script>
+        // Manejo del modal Editar Usuario: cargar datos y guardar cambios
+        (function () {
+            const saveBtn = document.getElementById('saveUserBtn');
+            const form = document.getElementById('formEditUser');
+            const editName = document.getElementById('editName');
+            const editEmail = document.getElementById('editEmail');
+            const editPassword = document.getElementById('editPassword');
+            const modalEl = document.getElementById('modalEditUser');
+
+            // Al abrir el modal, cargar datos actuales del usuario
+            modalEl.addEventListener('show.bs.modal', async () => {
+                const userId = localStorage.getItem('userId');
+                if (!userId) return;
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}`);
+                    if (!res.ok) return;
+                    const user = await res.json();
+                    editName.value = user.username || '';
+                    editEmail.value = user.email || '';
+                    editPassword.value = '';
+                } catch (err) {
+                    console.error('Error cargando usuario en modal:', err);
+                }
+            });
+
+            // Guardar cambios
+            saveBtn.addEventListener('click', async () => {
+                const userId = localStorage.getItem('userId');
+                if (!userId) return alert('Debes iniciar sesión para editar el usuario');
+
+                const payload = {
+                    username: editName.value.trim(),
+                    email: editEmail.value.trim()
+                };
+                if (editPassword.value && editPassword.value.length > 0) payload.password = editPassword.value;
+
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) {
+                        const txt = await res.text();
+                        console.error('Error al actualizar usuario:', txt);
+                        return alert('No se pudieron guardar los cambios: ' + txt);
+                    }
+                    const updated = await res.json();
+                    // actualizar UI
+                    const displayUsername = document.getElementById('displayUsername');
+                    displayUsername.textContent = `Nombre de Usuario: ${updated.username}`;
+
+                            // recargar ranking y usuario visibles
+                            try {
+                                if (rankingModule && typeof rankingModule.loadRanking === 'function') await rankingModule.loadRanking();
+                                if (rankingModule && typeof rankingModule.loadUser === 'function') await rankingModule.loadUser();
+                            } catch (e) {
+                                console.warn('No se pudo recargar ranking tras actualizar usuario:', e);
+                            }
+
+                            // cerrar modal
+                            const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                            modalInstance.hide();
+                            alert('Cambios guardados');
+                } catch (err) {
+                    console.error('Error guardando usuario:', err);
+                    alert('Error guardando cambios');
+                }
+            });
+        })();
     </script>
 </body>
 </html>

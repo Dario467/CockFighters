@@ -162,6 +162,38 @@ router.post('/team/:userId', async (req, res) => {
     }
 });
 
+// actualizar datos del usuario (username, email, password opcional)
+router.put('/user/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { username, email, password } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        // si cambian el email, verificar que no exista
+        if (email && email !== user.email) {
+            const exists = await User.findOne({ email });
+            if (exists) return res.status(400).json({ message: 'El correo ya está en uso' });
+            user.email = email;
+        }
+
+        if (username) user.username = username;
+        if (password) user.password = password; // el pre('save') en el modelo lo hasheará
+
+        await user.save();
+
+        const returned = user.toObject();
+        delete returned.password;
+        delete returned.creditCards;
+
+        return res.json(returned);
+    } catch (error) {
+        console.error('ERROR EN PUT USER:', error);
+        return res.status(500).json({ message: 'Error al actualizar usuario' });
+    }
+});
+
 // actualizar puntuación del usuario (set)
 router.post('/user/:userId/score', async (req, res) => {
     const { userId } = req.params;
@@ -201,7 +233,7 @@ router.get('/ranking', async (req, res) => {
     }
 });
 
-// incrementar puntuación del usuario 
+// incrementar puntuación del usuario
 router.post('/user/:userId/score/inc', async (req, res) => {
     const { userId } = req.params;
     let { delta } = req.body;

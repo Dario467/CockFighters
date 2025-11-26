@@ -201,7 +201,7 @@ router.get('/ranking', async (req, res) => {
     }
 });
 
-// incrementar puntuación del usuario (delta opcional, por defecto 1)
+// incrementar puntuación del usuario 
 router.post('/user/:userId/score/inc', async (req, res) => {
     const { userId } = req.params;
     let { delta } = req.body;

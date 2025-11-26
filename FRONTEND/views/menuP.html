@@ -637,7 +637,7 @@
                     const defaultEmojiSrc = 'https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/512px/2753.png';
                     if (mainGalloImgs[0]) mainGalloImgs[0].src = defaultEmojiSrc;
                     if (mainGalloImgs[1]) mainGalloImgs[1].src = defaultEmojiSrc;
-                    
+
                     // Deshabilitar botón jugar si no hay equipo
                     playBtn.style.pointerEvents = 'none';
                     playBtn.style.opacity = '0.5';
@@ -870,7 +870,7 @@
 
     <script>
         // Cargar usuario y ranking
-        (function () {
+        const rankingModule = (function () {
             const userId = localStorage.getItem('userId');
             const displayUsername = document.getElementById('displayUsername');
             const displayRanking = document.getElementById('displayRanking');
@@ -916,12 +916,52 @@
                 }
             }
 
+            // función para incrementar puntos del usuario actual
+            async function addPointsToCurrentUser(points) {
+                if (!userId) {
+                    console.warn('No hay usuario en sesión');
+                    return false;
+                }
+                if (typeof points !== 'number' || points < 0) {
+                    console.warn('points debe ser un número >= 0');
+                    return false;
+                }
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}/score/inc`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ delta: points })
+                    });
+                    if (!res.ok) {
+                        console.error('Error incrementando puntos:', await res.text());
+                        return false;
+                    }
+                    const updatedUser = await res.json();
+                    console.log('Puntos actualizados. Nuevo score:', updatedUser.score);
+                    // recargar ranking para reflejar cambios
+                    await loadRanking();
+                    await loadUser();
+                    return true;
+                } catch (err) {
+                    console.error('Error en addPointsToCurrentUser:', err);
+                    return false;
+                }
+            }
+
             // inicializar
             document.addEventListener('DOMContentLoaded', async () => {
                 await loadUser();
                 await loadRanking();
             });
+
+            // exponer función globalmente
+            return {
+                addPointsToCurrentUser
+            };
         })();
+
+        // hacer accesible globalmente
+        window.addPointsToCurrentUser = rankingModule.addPointsToCurrentUser;
     </script>
 </body>
 </html>

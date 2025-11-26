@@ -42,12 +42,6 @@ class Battle {
         if (this.p1.selectAction && this.p2.selectAction) {
             this.resolveTurn();
         }
-        
-        //if(actionDefinitions[player.selectAction].canUse(player.selectedCock)){
-            //actionDefinitions[player.selectAction].execute(player,player2);    
-        //}else{
-            //console.log("No se puede usar la acción");
-        //}
     }
 
     resolveTurn() {
@@ -57,10 +51,6 @@ class Battle {
             console.log("player 1 ", this.p1.selectAction);
             this.executeMove(this.p1, this.p2);
         }
-        //if (this.p2.cock.vida > 0) { 
-            //this.executeMove(this.p2, this.p1);
-        //}
-        //this.endTurn();
     }
 
     executeMove(first, second) {
@@ -100,7 +90,6 @@ class Battle {
     }
 
     endTurn() {
-        // limpiar
         this.p1.removeAction();
         this.p2.removeAction();
         this.p1.deactiveShield();
@@ -108,27 +97,34 @@ class Battle {
         
         if(!this.p1.selectedCock.alive && !this.p2.selectedCock.alive){
             let p1Change = this.p1.changeToAliveCock();
-            let p2Change = this.p2.changeToAliveCock()
+            let p2Change = this.p2.changeToAliveCock();
+            
             if(!p1Change && !p2Change){
                 console.log("empate");
+                sendEndInfo(true, 0, 0);
                 return;
-            }else if(!p1Change){
-                console.log("jugador 1 perdio");
+            } else if(!p1Change){
+                console.log("jugador 2 ganó");
+                sendEndInfo(false, 2, 1);
                 return;
-            }else if(!p2Change){
-                console.log("jugador 2 perdio");
+            } else if(!p2Change){
+                console.log("jugador 1 ganó");
+                sendEndInfo(false, 1, 2);
                 return;
             }
         }
         else if(!this.p1.selectedCock.alive){
             if(!this.p1.changeToAliveCock()){
-                console.log("jugador 1 perdio");
+                console.log("jugador 2 ganó");
+                sendEndInfo(false, 2, 1);
                 return;
             }
         }
-        else{
+        else if(!this.p2.selectedCock.alive){
             if(!this.p2.changeToAliveCock()){
-                console.log("jugador 2 perdio");
+                // P2 no tiene más gallos vivos = P1 gana
+                console.log("jugador 1 ganó");
+                sendEndInfo(false, 1, 2);
                 return;
             }
         }
@@ -137,11 +133,5 @@ class Battle {
         this.p2.rechargeUI();
         this.p1.UIManager.textBoxMenuDisplay(this.p1.player, this.p1.selectedCock.acciones, this.p1.cocks);
         this.p2.UIManager.textBoxMenuDisplay(this.p2.player, this.p2.selectedCock.acciones, this.p2.cocks);
-        // ¿Victoria?
-        //if (this.p1.cock.vida <= 0) {
-            //this.ui.matchEnd(2);
-        //} else if (this.p2.cock.vida <= 0) {
-            //this.ui.matchEnd(1);
-        //}
     }
 }

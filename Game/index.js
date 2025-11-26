@@ -106,7 +106,7 @@ async function connectWS() {
         window.location.href = "menuP.html";
     };
     ws.onerror = e => console.error("WS error", e);
-    ws.onmessage = e => {
+    ws.onmessage = async (e) => {
         const data = JSON.parse(e.data);
 
         if (data.type === "player_id") {
@@ -156,6 +156,26 @@ async function connectWS() {
         if(data.type === "nextText") {
           console.log("nextText recibido");
           battle.nextTxt();
+        }
+
+        if (data.type === "you_win") {
+            alert("¡Ganaste la batalla! +200 puntos");
+            await addPointsToCurrentUser(200);
+            window.location.href = "menuP.html";
+            return;
+        }
+
+        if (data.type === "you_lose") {
+            alert("Perdiste la batalla -100 puntos");
+            await addPointsToCurrentUser(-100);
+            window.location.href = "menuP.html";
+            return;
+        }
+
+        if (data.type === "you_tie") {
+            alert("¡Empate! +0 puntos");
+            window.location.href = "menuP.html";
+            return;
         }
 
         if (data.type === "opponent_disconnected") {
@@ -338,4 +358,13 @@ function crearPlayer2(cocksData,background){
   cocks,
   2,
   "/Assets/FONDO_bosque.jpg");
+}
+
+function sendEndInfo(empate,ganador,perdedor){
+  ws.send(JSON.stringify({
+    type: "endResults",
+    empate: empate,
+    winner: ganador,
+    loser: perdedor
+  }));
 }

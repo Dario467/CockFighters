@@ -107,6 +107,7 @@ class Player {
         for(const cock of this.cocks){
             if(cock.alive){
                 this.#selectedCock = cock;
+                console.log(this.#player + " cambio de gallo");
                 return true;
             }
         }

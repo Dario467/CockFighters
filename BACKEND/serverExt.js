@@ -73,6 +73,24 @@ module.exports = (app, server, WebSocket, os, PORT) => {
                 }
                 return;
             }
+            if (data.type === "endResults") {
+                if(data.empate){
+                    players[1].send(JSON.stringify({
+                        type: "you_tie"
+                    }));
+                    players[2].send(JSON.stringify({
+                        type: "you_tie"
+                    }));
+                    return;
+                }
+                players[data.winner].send(JSON.stringify({
+                    type: "you_win"
+                }));
+                players[data.loser].send(JSON.stringify({
+                    type: "you_lose"
+                }));
+                return;
+            }
             for (const client of wss.clients) {
                 if (client !== ws && client.readyState === WebSocket.OPEN)
                     client.send(messageStr);

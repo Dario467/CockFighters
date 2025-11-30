@@ -154,6 +154,11 @@ async function connectWS() {
           battle.playerChooseMove(data.player, data.move);
         }
 
+        if (data.type === "change") {
+          console.log("Cambio de gallo realizado por el jugador", data.player, ":", data.cock);
+          battle.playerChangeCock(data.player, data.cock);
+        }
+
         if(data.type === "nextText") {
           console.log("nextText recibido");
           battle.nextTxt();
@@ -229,6 +234,20 @@ function chooseMove(playerId, moveIndex) {
     console.log("Movimiento elegido:", moveIndex);
     battle.playerChooseMove(playerId, moveIndex);
 };
+
+function chooseCock(playerId, cockIndex){
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    console.error("WebSocket no está conectado");
+    return;
+  }
+  ws.send(JSON.stringify({
+    type: "change",
+    player: playerId,
+    cock: cockIndex
+  }));
+  console.log("Gallo elegido:", cockIndex);
+  battle.playerChangeCock(playerId, cockIndex);
+}
 
 function nextFun(){
   ws.send(JSON.stringify({

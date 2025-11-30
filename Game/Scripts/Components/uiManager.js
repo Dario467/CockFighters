@@ -88,12 +88,26 @@ class UIManager{
         for(let i = 0; i < gallos.length; i++){
             let gallo = gallos[i];
             let galloSprite = gallo.sprites["spriteBack"];
-
-            const galloCardHTML = `
-            <div class="gallo-card selected-gallo" style="width:80px; height:80px">
-                <img src="${galloSprite}" width="75" height="75">
-            </div>
-            `;
+            let galloCardHTML = null;
+            if(gallo.isSelected){
+                galloCardHTML = `
+                <div class="gallo-card selected-gallo" style="width:80px; height:80px" onclick="chooseCock(${player},${i})">
+                    <img src="${galloSprite}" width="75" height="75">
+                </div>
+                `;
+            }else if(gallo.alive){
+                galloCardHTML = `
+                <div class="gallo-card" style="width:80px; height:80px" onclick="chooseCock(${player},${i})">
+                    <img src="${galloSprite}" style="filter: brightness(100%);" width="75" height="75">
+                </div>
+                `;
+            }else{
+                galloCardHTML = `
+                <div class="gallo-card" style="width:80px; height:80px" onclick="chooseCock(${player},${i})">
+                    <img src="${galloSprite}" style="filter: grayscale(100%);" width="75" height="75">
+                </div>
+                `;
+            }
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = galloCardHTML;
             const galloCard = tempDiv.firstElementChild;

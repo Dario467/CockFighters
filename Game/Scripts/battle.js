@@ -15,6 +15,16 @@ class Battle {
         }
         player.chooseAction(-1);
 
+        if(player.selectAction){
+            if(player.selectAliveCock(cockIndex)){
+                console.log(player.selectedCock.nombre + " ha selecciondo " + player.selectAction.nombre)
+                player.UIManager.updateTextBoxUI("Se ha seleccionado tu acción°Esparando a que el otro jugador realice su acción",15,true);
+            }else{
+                console.log("No se puede usar la acción");
+                player.removeAction();
+            }
+        }
+
         if (this.p1.selectAction && this.p2.selectAction) {
             this.resolveTurn();
         }
@@ -77,10 +87,12 @@ class Battle {
             actionObj = this.msgStack.pop();
             if(actionObj.player.selectAction.tipo === "daño"){
                 actionObj.otherPlayer.rechargeUI();
+                actionObj.player.selectAction.audioVisual();
                 this.p1.UIManager.updateTextBoxUI(actionObj.msg,20);
                 this.p2.UIManager.updateTextBoxUI(actionObj.msg,20);
             }else{
                 actionObj.player.rechargeUI();
+                actionObj.player.selectAction.audioVisual();
                 this.p1.UIManager.updateTextBoxUI(actionObj.msg,20);
                 this.p2.UIManager.updateTextBoxUI(actionObj.msg,20);
             }

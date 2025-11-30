@@ -10,6 +10,11 @@ const actionDefinitions = {
         canUse(attacker){
             return attacker.selectedCock.bullets < attacker.selectedCock.bulletsMax || attacker.selectedCock.shields < 8;
         }
+    },{
+        audioVisual(){
+            const soundM = new SoundManager();
+            soundM.play("recharge");
+        }
     }),
 
     shield: new Action("Escudo",2,"prioritario",{
@@ -21,6 +26,11 @@ const actionDefinitions = {
     },{
         canUse(attacker){
             return attacker.selectedCock.shields >= 2;
+        }
+    },{
+        audioVisual(){
+            const soundM = new SoundManager();
+            soundM.play("shield");
         }
     }),
 
@@ -38,6 +48,11 @@ const actionDefinitions = {
         canUse(attacker){
             return attacker.selectedCock.bullets >= 1;
         }
+    },{
+        audioVisual(){
+            const soundM = new SoundManager();
+            soundM.play("shot");
+        }
     }),
 
     heal: new Action("Botiquin",1,"prioritario",{
@@ -49,6 +64,27 @@ const actionDefinitions = {
     },{
         canUse(attacker){
             return attacker.selectedCock.shields >= 1;
+        }
+    },{
+        audioVisual(){
+            const soundM = new SoundManager();
+            soundM.play("heal");
+        }
+    }),
+
+    change: new Action("Cambiar",1,"prioritario",{
+        execute(attacker, defender){
+            attacker.selectNewCock();
+            return `${attacker.selectedCock.nombre} fue enviado al campo de batalla`;        
+        }
+    },{
+        canUse(attacker){
+            return true;
+        }
+    },{
+        audioVisual(){
+            const soundM = new SoundManager();
+            soundM.play("change");
         }
     })
 }

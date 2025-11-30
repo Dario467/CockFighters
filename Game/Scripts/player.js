@@ -25,9 +25,11 @@ class Player {
         this.#selectAction = null;
         this.#haveShield = false;
         this.background = background;
+        this.cockToChange = null;
     }
 
     player_awake() {
+        this.#selectedCock.isSelected = true;
         this.#spriteRender = new SpriteRender(this.#position, this.scale,this.#selectedCock.sprites["spriteBack"]);
         this.#UIManager = new UIManager(this.#player);
         this.#UIManager.updateHealthUI(this.#selectedCock.vida,this.#selectedCock.vidaMax);
@@ -85,7 +87,7 @@ class Player {
 
     chooseAction(moveIndex){
         if(moveIndex === -1){
-            this.#selectAction = "cambiar";
+            this.#selectAction = actionDefinitions["change"];
             return;
         }
         this.#selectAction = actionDefinitions[this.#selectedCock.acciones[moveIndex]];
@@ -105,13 +107,31 @@ class Player {
 
     changeToAliveCock(){
         for(const cock of this.cocks){
-            if(cock.alive){
+            if(cock.alive && !cock.isSelected){
+                this.#selectedCock.isSelected = false;
                 this.#selectedCock = cock;
+                this.#selectedCock.isSelected = true;
                 console.log(this.#player + " cambio de gallo");
                 return true;
             }
         }
         return false;
+    }
+
+    selectAliveCock(cockIndex){
+        if(cockIndex >= this.cocks.length || !this.cocks[cockIndex].alive || this.cocks[cockIndex] === this.#selectedCock){
+            return false;
+        }
+        this.cockToChange = this.cocks[cockIndex];
+        console.log(this.#player + " cambio de gallo");
+        return true;
+    }
+
+    selectNewCock(){
+        this.#selectedCock.isSelected = false;
+        this.#selectedCock = this.cockToChange;
+        this.#selectedCock.isSelected = true;
+        this.cockToChange = null;
     }
 
     rechargeUI(){

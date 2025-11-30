@@ -11,6 +11,7 @@ class Cock {
         this.acciones = acciones;
         this.curacion = cura;
         this.alive = true;
+        this.isSelected = false;
     }
 
     damage(amount) {

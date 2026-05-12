@@ -21,7 +21,7 @@
         .container-custom {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            grid-template-rows: auto auto auto;
+            grid-template-rows: auto auto auto auto;
             gap: 20px;
             width: 90%;
             max-width: 1200px;
@@ -91,18 +91,20 @@
 
         .edit-team-section {
             grid-column: 1 / 2;
-            grid-row: 2 / 3;
-            align-self: end;
-            margin-top: 180px;
-            width: fit-content;
-            justify-self: center;
+            grid-row: 3 / 4;
+            align-self: start;
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
 
         .play-section {
             border: 4px solid #d4621f;
             background: rgba(0, 0, 0, 0.85);
             grid-column: 1 / 2;
-            grid-row: 3 / 4;
+            grid-row: 4 / 5;
             min-height: 200px;
             display: flex;
             justify-content: center;
@@ -117,7 +119,7 @@
             background: rgba(0, 0, 0, 0.85);
             padding: 20px;
             grid-column: 2 / 3;
-            grid-row: 1 / 4;
+            grid-row: 1 / 5;
             min-height: 600px;
             margin-left: 20px;
             border-radius: 20px;
@@ -498,6 +500,48 @@
             // obtener ID del usuario desde localStorage (se guarda en login.html)
             const userId = localStorage.getItem('userId');
 
+            // Cargar y aplicar el fondo seleccionado del usuario al abrir la página
+            if (userId) {
+                try {
+                    const res = await fetch(`/api/auth/user/${userId}`);
+                    if (res.ok) {
+                        const user = await res.json();
+                        const selectedFondo = user.selectedFondo || 'default';
+                        
+                        // Mapeo de fondos
+                        const assetForKey = (key) => {
+                            const map = {
+                                nevado: '/Assets/FONDO_nevado.jpg',
+                                kfc: '/Assets/FONDO_kfc.jpg',
+                                pradera: '/Assets/FONDO_pradera.jpg',
+                                bosque: '/Assets/FONDO_bosque.jpg',
+                                desierto: '/Assets/FONDO_desierto.jpg',
+                                selva: '/Assets/FONDO_selva.jpg'
+                            };
+                            return map[key] || '';
+                        };
+                        
+                        const gallosSection = document.querySelector('.gallos-section');
+                        if (gallosSection) {
+                            if (selectedFondo === 'default' || !selectedFondo) {
+                                gallosSection.style.backgroundImage = 'none';
+                                gallosSection.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+                            } else {
+                                const url = assetForKey(selectedFondo);
+                                if (url) {
+                                    gallosSection.style.backgroundImage = `url('${url}')`;
+                                    gallosSection.style.backgroundSize = 'cover';
+                                    gallosSection.style.backgroundPosition = 'center';
+                                    gallosSection.style.backgroundRepeat = 'no-repeat';
+                                }
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error cargando fondo inicial:', err);
+                }
+            }
+
             // mantener datos y orden de selección
             let misGallosGlobal = [];
             const selectedOrder = []; // guardará índices en el orden que fueron seleccionados
@@ -749,6 +793,25 @@
                 }
             };
 
+            // Función para aplicar el fondo a la sección de gallos
+            const applyFondoToGallosSection = (key) => {
+                const gallosSection = document.querySelector('.gallos-section');
+                if (!gallosSection) return;
+
+                if (!key || key === 'default') {
+                    gallosSection.style.backgroundImage = 'none';
+                    gallosSection.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+                } else {
+                    const url = assetForKey(key);
+                    if (url) {
+                        gallosSection.style.backgroundImage = `url('${url}')`;
+                        gallosSection.style.backgroundSize = 'cover';
+                        gallosSection.style.backgroundPosition = 'center';
+                        gallosSection.style.backgroundRepeat = 'no-repeat';
+                    }
+                }
+            };
+
             // cargar fondos del usuario y selectedFondo
             async function loadFondos() {
                 fondosList.innerHTML = '<li class="list-group-item">Cargando...</li>';
@@ -851,6 +914,10 @@
 
                     // actualizar solo la previsualización del modal y cerrar (no tocar el fondo del menú principal)
                     applyFondo(fondoSaved);
+                    
+                    // Aplicar el fondo a la sección de gallos también
+                    applyFondoToGallosSection(fondoSaved);
+                    
                     const modalEl = document.getElementById('changeFondoModal');
                     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                     modalInstance.hide();

@@ -14,8 +14,7 @@ const galloSchema = new mongoose.Schema({
     ]
     
 }, { 
-    collection: "Cock's" // Tu colección específica
+    collection: "Cock's" 
 });
 
-// Exportamos el MODELO para poder usar "Gallo.find()" en otros archivos
 module.exports = mongoose.model('Gallo', galloSchema);
